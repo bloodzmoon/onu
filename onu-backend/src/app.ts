@@ -1,13 +1,18 @@
-import Express, { Request, Response } from 'express'
+import Express from 'express'
 import Cors from 'cors'
+import Http from 'http'
+import WebSocket from './socket'
+import Router from './router'
 
+const PORT = process.env.PORT || 5000
 const app = Express()
+const server = Http.createServer(app)
+
+app.use(Router)
 app.use(Cors())
+app.use(Express.json())
+WebSocket.init(server)
 
-app.get('/', (req: Request, res: Response) => {
-  res.status(200).send('Hello World!!')
-})
-
-app.listen(5000, () => {
-  console.log('Server Started at Port, 5000')
+server.listen(PORT, () => {
+  console.log(`Server has started at port ${PORT}`)
 })
