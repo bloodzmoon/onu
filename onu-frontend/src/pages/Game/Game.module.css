@@ -1,0 +1,40 @@
+.container {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.id {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  font-weight: bold;
+  font-size: 1.25rem;
+  color: #b2b2b2;
+}
+
+.player {
+  width: 120px;
+  height: 160px;
+  background: crimson;
+  position: absolute;
+}
+
+.one {
+  transform: translateY(280px);
+}
+
+.two {
+  transform: rotate(90deg) translateY(280px);
+}
+
+.three {
+  transform: rotate(180deg) translateY(280px);
+}
+
+.four {
+  transform: rotate(270deg) translateY(280px);
+}

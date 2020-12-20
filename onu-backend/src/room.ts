@@ -1,5 +1,6 @@
 import { v4 as GenerateUUID } from 'uuid'
 import WebSocket from 'ws'
+import { JoinRoomPayload } from './messageTypes'
 
 interface User {
   socket: WebSocket
@@ -23,18 +24,33 @@ const create = (id?: string) => {
   return ROOMS[ROOMS.length - 1]
 }
 
-const addUser = (
-  socket: WebSocket,
-  { name, roomId }: { name: string; roomId: string }
-) => {
-  const room = get(roomId) || create(roomId)
+const addUser = (socket: WebSocket, { player, gameId }: JoinRoomPayload) => {
+  const room = get(gameId) || create(gameId)
 
-  const user = room.users.find((u) => u.name === name)
-  if (user) return
+  const user = room.users.find((u) => u.name === player)
+  if (user)
+    return socket.send(
+      JSON.stringify({
+        action: 'error',
+        payload: 'This name has been taken by someone in this room!',
+      })
+    )
 
-  room.users.push({ name, socket })
-  console.log(`${name} has joined room ${roomId}`)
-  console.log(room)
+  room.users.push({ name: player, socket })
+  console.log(`${player} has joined room ${gameId}`)
+}
+
+const removeUser = (socket: WebSocket) => {
+  let user: User | undefined
+  const room = ROOMS.find((r) => {
+    user = r.users.find((u) => u.socket === socket)
+    return user
+  })
+  if (!room || !user) return
+
+  const index = room.users.indexOf(user)
+  if (index !== -1) room.users.splice(index, 1)
+  console.log(`${user.name} has left room ${room.id}`)
 }
 
 const broadcast = (
@@ -55,5 +71,6 @@ export default {
   getAll,
   create,
   addUser,
+  removeUser,
   broadcast,
 }

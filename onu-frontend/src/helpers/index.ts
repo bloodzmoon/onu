@@ -1,0 +1,1 @@
+export { joinGameAction } from './socketGame'

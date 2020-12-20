@@ -2,10 +2,7 @@ import { Server as WebSocket } from 'ws'
 import Http from 'http'
 import Rooms from './room'
 
-interface Message {
-  action: 'join' | 'text'
-  payload: any
-}
+import { Message } from './messageTypes'
 
 const init = (server: Http.Server) => {
   const socket = new WebSocket({ server })
@@ -18,8 +15,8 @@ const init = (server: Http.Server) => {
         case 'join':
           return Rooms.addUser(ws, payload)
 
-        case 'text':
-          return Rooms.broadcast(ws, payload)
+        // case 'text':
+        //   return Rooms.broadcast(ws, payload)
 
         default:
           return
@@ -27,7 +24,7 @@ const init = (server: Http.Server) => {
     })
 
     ws.on('close', () => {
-      console.log('some disconnection')
+      Rooms.removeUser(ws)
     })
   })
 }

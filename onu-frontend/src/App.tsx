@@ -1,14 +1,17 @@
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
-import { Home, Room } from './pages'
+import { RecoilRoot } from 'recoil'
+import { Home, Game } from './pages'
 
 function App() {
   return (
-    <BrowserRouter>
-      <Switch>
-        <Route exact path="/" component={Home} />
-        <Route path="/room" component={Room} />
-      </Switch>
-    </BrowserRouter>
+    <RecoilRoot>
+      <BrowserRouter>
+        <Switch>
+          <Route exact path="/" component={Home} />
+          <Route path="/game" component={Game} />
+        </Switch>
+      </BrowserRouter>
+    </RecoilRoot>
   )
 }
 
