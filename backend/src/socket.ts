@@ -1,7 +1,9 @@
 import WebSocket from 'ws'
 import Http from 'http'
 import Database from './core/db'
+import Game from './core/game'
 import Player from './core/player'
+import Message from './utils/message'
 import { InMessage } from './models/message.model'
 
 /**
@@ -12,22 +14,30 @@ const init = (server: Http.Server) => {
   const wss = new WebSocket.Server({ server })
   const db = new Database()
 
-  wss.on('connection', (socket) => {
-    socket.on('message', (msg: string) => {
-      const { action, payload }: InMessage = JSON.parse(msg)
+  const broadcast = (socket: WebSocket, game: Game, message: string) => {
+    game.players.forEach((p) => {
+      if (p.socket !== socket) p.socket.send(message)
+    })
+  }
 
-      switch (action) {
+  wss.on('connection', (socket) => {
+    socket.on('message', (message: string) => {
+      const msg: InMessage = JSON.parse(message)
+
+      switch (msg.action) {
         case 'join':
           {
-            const { gameId, playerName } = payload
+            const { gameId, playerName } = msg.payload
             const game = db.getGame(gameId)
-            const player = new Player(playerName, socket)
+            const playerId = game.players.length
+            const player = new Player(playerId, playerName, socket)
+            const drawnCards = player.draw(game.deck, 5)
             game.addPlayer(player)
+            socket.send(Message.init(game, playerId, drawnCards))
+            broadcast(socket, game, Message.join(game))
+
             console.log('----')
             db.show()
-            socket.send(
-              JSON.stringify({ action: 'getDeck', payload: game.deck })
-            )
           }
           break
 

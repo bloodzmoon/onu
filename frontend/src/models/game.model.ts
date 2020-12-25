@@ -1,11 +1,13 @@
 import { Card } from './card.model'
-import { Player } from './player.model'
 
 export interface GameState {
-  id: string
-  status: 'LOADING' | 'OK'
-  direction: 'clockwise' | 'couterclockwise'
-  playerName: string
-  players: Player[]
-  deck: Card[]
+  turn: number
+  direction: 'cw' | 'ccw'
+  players: {
+    id: number
+    name: string
+    cardCount: number
+  }[]
+  myId: number
+  myCard: Card[]
 }

@@ -2,21 +2,21 @@ import { useState, ChangeEvent, KeyboardEvent } from 'react'
 import { useHistory } from 'react-router-dom'
 import { useRecoilState } from 'recoil'
 import { Button, Input } from '../../components'
-import { gameState } from '../../store'
+import { globalState } from '../../store'
 import styles from './Home.module.css'
 
 export const Home = () => {
   type HomeState = 'ENTER_NAME' | 'ENTER_ROOM'
   const [state, setState] = useState<HomeState>('ENTER_NAME')
 
-  const [game, setGame] = useRecoilState(gameState)
+  const [global, setGlobal] = useRecoilState(globalState)
   const history = useHistory()
 
   const setPlayerName = (e: ChangeEvent<HTMLInputElement>) =>
-    setGame({ ...game, playerName: e.target.value })
+    setGlobal({ ...global, myName: e.target.value })
 
   const setGameId = (e: ChangeEvent<HTMLInputElement>) =>
-    setGame({ ...game, id: e.target.value })
+    setGlobal({ ...global, id: e.target.value })
 
   const handleEnterKey = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
@@ -33,12 +33,12 @@ export const Home = () => {
   }
 
   const confirmName = () => {
-    if (game.playerName.length === 0) return alert('Enter ya name!')
+    if (global.myName.length === 0) return alert('Enter ya name!')
     setState('ENTER_ROOM')
   }
 
   const enterGame = () => {
-    if (game.id.length === 0) return alert('Enter game ID!!!')
+    if (global.id.length === 0) return alert('Enter game ID!!!')
     history.push('/game')
   }
 
@@ -49,7 +49,7 @@ export const Home = () => {
         <>
           <Input
             placeholder="Your name"
-            value={game.playerName}
+            value={global.myName}
             onChange={setPlayerName}
             onKeyPress={handleEnterKey}
             autoComplete="no"
@@ -63,7 +63,7 @@ export const Home = () => {
         <>
           <Input
             placeholder="Room ID"
-            value={game.id}
+            value={global.id}
             onChange={setGameId}
             onKeyPress={handleEnterKey}
             autoComplete="no"

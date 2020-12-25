@@ -1,6 +1,10 @@
 import WebSocket from 'ws'
 import Game from './game'
 
+/**
+ * Main database of Onu game server
+ * contains many instance of Game
+ */
 class Database {
   private games: Game[]
 

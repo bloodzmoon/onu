@@ -16,9 +16,32 @@ export type OutMessage = JoinMessage
 /**
  * Incoming message
  */
-interface GetDeckMessage {
-  action: 'getDeck'
-  payload: Card[]
+interface InitMessage {
+  action: 'init'
+  payload: {
+    turn: number
+    direction: 'cw' | 'ccw'
+    players: {
+      id: number
+      name: string
+      cardCount: number
+    }[]
+    playerId: number
+    cards: Card[]
+  }
 }
 
-export type InMessage = GetDeckMessage
+interface UpdateMessage {
+  action: 'update'
+  payload: {
+    turn: number
+    direction: 'cw' | 'ccw'
+    players: {
+      id: number
+      name: string
+      cardCount: number
+    }[]
+  }
+}
+
+export type InMessage = InitMessage | UpdateMessage

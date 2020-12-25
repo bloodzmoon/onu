@@ -1,14 +1,9 @@
 import { atom } from 'recoil'
-import { GameState } from '../models/game.model'
 
-export const gameState = atom<GameState>({
-  key: 'gameState',
+export const globalState = atom<{ id: string; myName: string }>({
+  key: 'globalState',
   default: {
     id: '',
-    status: 'LOADING',
-    direction: 'clockwise',
-    playerName: '',
-    players: [],
-    deck: [],
+    myName: '',
   },
 })
