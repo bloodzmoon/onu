@@ -1,8 +1,9 @@
 import { useEffect, useRef } from 'react'
 import { useHistory } from 'react-router-dom'
-import { useRecoilState, useRecoilValue } from 'recoil'
-import { gameState, playerState } from '../../store'
-import { joinGameAction } from '../../helpers'
+import { useRecoilState } from 'recoil'
+import { gameState } from '../../store'
+import { joinMessage } from '../../helpers'
+import { InMessage } from '../../models/message.model'
 import styles from './Game.module.css'
 
 const ENDPOINT = 'ws://localhost:5000'
@@ -13,7 +14,6 @@ export const Game = () => {
   if (!game.id) history.push('/')
 
   const socket = useRef<WebSocket | null>(null)
-  const player = useRecoilValue(playerState)
 
   useEffect(() => {
     socket.current = new WebSocket(ENDPOINT)
@@ -25,20 +25,18 @@ export const Game = () => {
 
   const joinRoom = () => {
     if (!socket.current) return history.push('/')
-    socket.current.send(joinGameAction(player.name, game.id))
-    setGame({ ...game, status: 'OK' })
+    socket.current.send(joinMessage(game.playerName, game.id))
   }
 
   function handleMessage(this: WebSocket, msg: MessageEvent<any>) {
-    const { action, payload } = JSON.parse(msg.data)
+    const { action, payload }: InMessage = JSON.parse(msg.data)
     switch (action) {
-      case 'error':
-        history.push('/')
-        alert(payload)
-        return
+      case 'getDeck':
+        setGame({ ...game, deck: payload, status: 'OK' })
+        break
 
       default:
-        return
+        break
     }
   }
 
@@ -47,6 +45,11 @@ export const Game = () => {
   return (
     <div className={styles.container}>
       <div className={styles.id}>Game ID {game.id}</div>
+      <div className={styles.deck}>
+        {game.deck.map((card) => (
+          <p>{JSON.stringify(card)}</p>
+        ))}
+      </div>
       <div className={`${styles.player} ${styles.one}`}>1</div>
       <div className={`${styles.player} ${styles.two}`}>2</div>
       <div className={`${styles.player} ${styles.three}`}>3</div>

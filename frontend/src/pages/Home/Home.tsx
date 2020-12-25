@@ -2,7 +2,7 @@ import { useState, ChangeEvent, KeyboardEvent } from 'react'
 import { useHistory } from 'react-router-dom'
 import { useRecoilState } from 'recoil'
 import { Button, Input } from '../../components'
-import { gameState, playerState } from '../../store'
+import { gameState } from '../../store'
 import styles from './Home.module.css'
 
 export const Home = () => {
@@ -10,11 +10,10 @@ export const Home = () => {
   const [state, setState] = useState<HomeState>('ENTER_NAME')
 
   const [game, setGame] = useRecoilState(gameState)
-  const [player, setPlayer] = useRecoilState(playerState)
   const history = useHistory()
 
   const setPlayerName = (e: ChangeEvent<HTMLInputElement>) =>
-    setPlayer({ ...player, name: e.target.value })
+    setGame({ ...game, playerName: e.target.value })
 
   const setGameId = (e: ChangeEvent<HTMLInputElement>) =>
     setGame({ ...game, id: e.target.value })
@@ -34,13 +33,12 @@ export const Home = () => {
   }
 
   const confirmName = () => {
-    if (player.name.length === 0) return alert('Enter ya name!')
+    if (game.playerName.length === 0) return alert('Enter ya name!')
     setState('ENTER_ROOM')
   }
 
   const enterGame = () => {
     if (game.id.length === 0) return alert('Enter game ID!!!')
-    console.log(player, game)
     history.push('/game')
   }
 
@@ -51,7 +49,7 @@ export const Home = () => {
         <>
           <Input
             placeholder="Your name"
-            value={player.name}
+            value={game.playerName}
             onChange={setPlayerName}
             onKeyPress={handleEnterKey}
             autoComplete="no"

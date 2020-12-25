@@ -2,7 +2,7 @@ import WebSocket from 'ws'
 import Http from 'http'
 import Database from './core/db'
 import Player from './core/player'
-import { Message } from './models/message.model'
+import { InMessage } from './models/message.model'
 
 /**
  * Create a WebSocket Server that will handle
@@ -14,7 +14,7 @@ const init = (server: Http.Server) => {
 
   wss.on('connection', (socket) => {
     socket.on('message', (msg: string) => {
-      const { action, payload }: Message = JSON.parse(msg)
+      const { action, payload }: InMessage = JSON.parse(msg)
 
       switch (action) {
         case 'join':
@@ -25,7 +25,9 @@ const init = (server: Http.Server) => {
             game.addPlayer(player)
             console.log('----')
             db.show()
-            // socket.send(JSON.stringify({ action: 'deck', payload: game.deck }))
+            socket.send(
+              JSON.stringify({ action: 'getDeck', payload: game.deck })
+            )
           }
           break
 

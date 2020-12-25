@@ -1,1 +1,1 @@
-export { joinGameAction } from './socketGame'
+export { joinMessage } from './messages'

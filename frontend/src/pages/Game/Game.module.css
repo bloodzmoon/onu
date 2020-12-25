@@ -16,6 +16,12 @@
   color: #b2b2b2;
 }
 
+.deck {
+  width: 300px;
+  height: 300px;
+  overflow: scroll;
+}
+
 .player {
   width: 120px;
   height: 160px;

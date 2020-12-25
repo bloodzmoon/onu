@@ -1,3 +1,10 @@
+/**
+ * Outgoing message
+ */
+
+/**
+ * Incoming message
+ */
 interface JoinMessage {
   action: 'join'
   payload: JoinPayload
@@ -8,4 +15,4 @@ export interface JoinPayload {
   gameId: string
 }
 
-export type Message = JoinMessage
+export type InMessage = JoinMessage
