@@ -1,17 +1,19 @@
-interface JoinGameAction {
+interface JoinMessage {
   action: 'join'
-  payload: {
-    player: string
-    gameId: string
-  }
+  payload: JoinPayload
 }
 
-type Message = JoinGameAction
+export interface JoinPayload {
+  playerName: string
+  gameId: string
+}
 
-export const joinGameAction = (player: string, gameId: string) => {
+export type Message = JoinMessage
+
+export const joinGameAction = (playerName: string, gameId: string) => {
   const msg: Message = {
     action: 'join',
-    payload: { player, gameId },
+    payload: { playerName, gameId },
   }
   return JSON.stringify(msg)
 }

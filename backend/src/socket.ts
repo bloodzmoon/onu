@@ -1,30 +1,41 @@
-import { Server as WebSocket } from 'ws'
+import WebSocket from 'ws'
 import Http from 'http'
-import Rooms from './room'
+import Database from './core/db'
+import Player from './core/player'
+import { Message } from './models/message.model'
 
-import { Message } from './messageTypes'
-
+/**
+ * Create a WebSocket Server that will handle
+ * all sockets connection
+ */
 const init = (server: Http.Server) => {
-  const socket = new WebSocket({ server })
+  const wss = new WebSocket.Server({ server })
+  const db = new Database()
 
-  socket.on('connection', (ws) => {
-    ws.on('message', (msg: string) => {
+  wss.on('connection', (socket) => {
+    socket.on('message', (msg: string) => {
       const { action, payload }: Message = JSON.parse(msg)
 
       switch (action) {
         case 'join':
-          return Rooms.addUser(ws, payload)
-
-        // case 'text':
-        //   return Rooms.broadcast(ws, payload)
+          {
+            const { gameId, playerName } = payload
+            const game = db.getGame(gameId)
+            const player = new Player(playerName, socket)
+            game.addPlayer(player)
+            console.log('----')
+            db.show()
+            // socket.send(JSON.stringify({ action: 'deck', payload: game.deck }))
+          }
+          break
 
         default:
-          return
+          break
       }
     })
 
-    ws.on('close', () => {
-      Rooms.removeUser(ws)
+    socket.on('close', () => {
+      db.disconnect(socket)
     })
   })
 }
