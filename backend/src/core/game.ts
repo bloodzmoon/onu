@@ -34,6 +34,7 @@ class Game {
         return i
       }
     }
+    return -1
   }
 
   getPlayerBySocket(socket: WebSocket) {
