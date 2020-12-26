@@ -1,6 +1,11 @@
 import { atom } from 'recoil'
 
-export const globalState = atom<{ id: string; myName: string }>({
+interface GlobalState {
+  id: string
+  myName: string
+}
+
+export const globalState = atom<GlobalState>({
   key: 'globalState',
   default: {
     id: '',

@@ -1,8 +1,13 @@
 import WebSocket from 'ws'
 import Player from './player'
-import Deck from './deck'
+import Deck from '../utils/deck'
 import { Card } from '../models/card.model'
 
+/**
+ * Game will contains all information about
+ * Card and Player. Each player have an ID
+ * and `turn` is a current player ID that playing
+ */
 class Game {
   readonly id: string
   readonly players: Player[]
@@ -29,7 +34,6 @@ class Game {
         return i
       }
     }
-    return -1
   }
 
   getPlayerBySocket(socket: WebSocket) {

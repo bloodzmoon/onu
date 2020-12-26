@@ -32,16 +32,16 @@ class Database {
   }
 
   disconnect(socket: WebSocket) {
-    let disconneted: Game | null = null
+    let fromGame: Game | null = null
     this.games.forEach((g) => {
       const player = g.getPlayerBySocket(socket)
       if (player) {
-        disconneted = g
+        fromGame = g
         g.removePlayer(player)
         console.log(`! ${player.name} has left game ${g.id}`)
       }
     })
-    return disconneted
+    return fromGame
   }
 }
 

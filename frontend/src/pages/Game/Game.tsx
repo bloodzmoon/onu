@@ -78,32 +78,34 @@ export const Game = () => {
   if (state === 'LOADING') return <div>Loading</div>
 
   return (
-    <div className={styles.container}>
+    <>
       <div className={styles.gameid}>Game ID {global.id}</div>
-      {game.players.map((p, i) => (
-        <div key={p.id} className={`${styles.player} ${styles[`p${i}`]}`}>
-          {p.id === game.myId ? (
-            <>
-              <span className={styles.name}>{global.myName}</span>
-              {game.myCard.map((c, i) => (
-                <Card key={`${p.id}${i}`} data={c} canHover />
-              ))}
-            </>
-          ) : (
-            <>
-              <span className={styles.name}>{p.name}</span>
-              {Array(p.cardCount)
-                .fill('')
-                .map((_, i) => (
-                  <Card
-                    key={`${p.id}${i}`}
-                    data={{ type: 'H', color: 'black', content: 'ONU' }}
-                  />
+      <div className={styles.container}>
+        {game.players.map((p, i) => (
+          <div key={p.id} className={`${styles.player} ${styles[`p${i}`]}`}>
+            {p.id === game.myId ? (
+              <>
+                <span className={styles.name}>{global.myName}</span>
+                {game.myCard.map((c, i) => (
+                  <Card key={`${p.id}${i}`} data={c} canHover />
                 ))}
-            </>
-          )}
-        </div>
-      ))}
-    </div>
+              </>
+            ) : (
+              <>
+                <span className={styles.name}>{p.name}</span>
+                {Array(p.cardCount)
+                  .fill('')
+                  .map((_, i) => (
+                    <Card
+                      key={`${p.id}${i}`}
+                      data={{ type: 'H', color: 'black', content: 'ONU' }}
+                    />
+                  ))}
+              </>
+            )}
+          </div>
+        ))}
+      </div>
+    </>
   )
 }
