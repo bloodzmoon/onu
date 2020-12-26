@@ -79,19 +79,19 @@ export const Game = () => {
 
   return (
     <div className={styles.container}>
-      <div className={styles.id}>Game ID {global.id}</div>
+      <div className={styles.gameid}>Game ID {global.id}</div>
       {game.players.map((p, i) => (
         <div key={p.id} className={`${styles.player} ${styles[`p${i}`]}`}>
           {p.id === game.myId ? (
             <>
-              {global.myName}
+              <span className={styles.name}>{global.myName}</span>
               {game.myCard.map((c, i) => (
-                <Card key={i} data={c} />
+                <Card key={i} data={c} canHover />
               ))}
             </>
           ) : (
             <>
-              {p.name}
+              <span className={styles.name}>{p.name}</span>
               {Array(p.cardCount)
                 .fill('')
                 .map((_, i) => (
@@ -104,7 +104,6 @@ export const Game = () => {
           )}
         </div>
       ))}
-      <Card data={{ type: 'H', color: 'black', content: 'ONU' }} />
     </div>
   )
 }

@@ -44,7 +44,7 @@ export const Home = () => {
 
   return (
     <div className={styles.container}>
-      <h1>ONU!</h1>
+      <header className={styles.header}>ONU!</header>
       {state === 'ENTER_NAME' && (
         <>
           <Input

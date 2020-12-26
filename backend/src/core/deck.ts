@@ -17,7 +17,7 @@ const generateDeck = () => {
 
   // Generate Acion Card
   colors.forEach((c) => {
-    const actions = ['Draw 2', 'Reverse', 'Skip']
+    const actions = ['+2', 'Rev', 'Skip']
     actions.forEach((a) => {
       const card = { type: 'A', content: a, color: c }
       deck.push(card)
@@ -26,7 +26,7 @@ const generateDeck = () => {
   })
 
   // Generate Wild Card
-  const wilds = ['Change', 'Draw4 & Change']
+  const wilds = ['Color', '+4']
   wilds.forEach((w) => {
     const card = { type: 'W', content: w, color: 'black' }
     for (let i = 0; i < 4; i++) deck.push(card)

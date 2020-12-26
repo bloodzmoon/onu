@@ -21,13 +21,13 @@ interface NumberCard {
 
 interface ActionCard {
   type: 'A'
-  content: 'Draw 2' | 'Reverse' | 'Skip'
+  content: '+2' | 'Rev' | 'Skip'
   color: 'red' | 'green' | 'yellow' | 'blue'
 }
 
 interface WildCard {
   type: 'W'
-  content: 'Change' | 'Draw4 & Change'
+  content: 'Color' | '+4'
   color: 'black'
 }
 
