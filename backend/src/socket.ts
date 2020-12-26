@@ -34,7 +34,7 @@ const init = (server: Http.Server) => {
             const drawnCards = player.draw(game.deck, 5)
             game.addPlayer(player)
             socket.send(Message.init(game, playerId, drawnCards))
-            broadcast(socket, game, Message.join(game))
+            broadcast(socket, game, Message.update(game))
 
             console.log('----')
             db.show()

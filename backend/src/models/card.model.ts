@@ -16,13 +16,13 @@
 interface NumberCard {
   type: 'N'
   content: '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9'
-  color: 'Red' | 'Green' | 'Yellow' | 'Blue'
+  color: 'red' | 'green' | 'yellow' | 'blue'
 }
 
 interface ActionCard {
   type: 'A'
   content: 'Draw 2' | 'Reverse' | 'Skip'
-  color: 'Red' | 'Green' | 'Yellow' | 'Blue'
+  color: 'red' | 'green' | 'yellow' | 'blue'
 }
 
 interface WildCard {
@@ -33,8 +33,8 @@ interface WildCard {
 
 interface HideCard {
   type: 'H'
-  content: ''
-  color: ''
+  content: 'ONU'
+  color: 'black'
 }
 
 export type Card = NumberCard | ActionCard | WildCard | HideCard

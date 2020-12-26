@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import { useRecoilValue } from 'recoil'
+import { Card } from '../../components'
 import { globalState } from '../../store'
 import { joinMessage } from '../../helpers'
 import { GameState } from '../../models/game.model'
@@ -45,14 +46,14 @@ export const Game = () => {
       case 'init':
         {
           const { turn, direction, playerId, players, cards } = msg.payload
-          setGame({
+          setGame((game) => ({
             ...game,
             turn,
             direction,
             players,
             myId: playerId,
             myCard: cards,
-          })
+          }))
           setState('OK')
         }
         break
@@ -60,12 +61,12 @@ export const Game = () => {
       case 'update':
         {
           const { turn, direction, players } = msg.payload
-          setGame({
+          setGame((game) => ({
             ...game,
             turn,
             direction,
             players,
-          })
+          }))
         }
         break
 
@@ -84,15 +85,26 @@ export const Game = () => {
           {p.id === game.myId ? (
             <>
               {global.myName}
-              <br />
-              {JSON.stringify(game.myCard)}
-              <br />
+              {game.myCard.map((c, i) => (
+                <Card key={i} data={c} />
+              ))}
             </>
           ) : (
-            <>{`${p.name} ${p.cardCount}`}</>
+            <>
+              {p.name}
+              {Array(p.cardCount)
+                .fill('')
+                .map((_, i) => (
+                  <Card
+                    key={i}
+                    data={{ type: 'H', color: 'black', content: 'ONU' }}
+                  />
+                ))}
+            </>
           )}
         </div>
       ))}
+      <Card data={{ type: 'H', color: 'black', content: 'ONU' }} />
     </div>
   )
 }

@@ -34,7 +34,10 @@ class Database {
   disconnect(socket: WebSocket) {
     this.games.forEach((g) => {
       const player = g.getPlayerBySocket(socket)
-      if (player) g.removePlayer(player)
+      if (player) {
+        g.removePlayer(player)
+        console.log(`! ${player.name} has left game ${g.id}`)
+      }
     })
   }
 }

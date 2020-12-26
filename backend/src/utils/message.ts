@@ -16,7 +16,7 @@ const init = (game: Game, playerId: number, cards: Card[]) => {
   return JSON.stringify(message)
 }
 
-const join = (game: Game) => {
+const update = (game: Game) => {
   const message: OutMessage = {
     action: 'update',
     payload: {
@@ -30,5 +30,5 @@ const join = (game: Game) => {
 
 export default {
   init,
-  join,
+  update,
 }

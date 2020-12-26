@@ -4,7 +4,7 @@
  */
 const generateDeck = () => {
   const deck: any[] = []
-  const colors = ['Red', 'Green', 'Yellow', 'Blue']
+  const colors = ['red', 'green', 'yellow', 'blue']
 
   // Generate Number Card
   colors.forEach((c) => {
@@ -28,7 +28,7 @@ const generateDeck = () => {
   // Generate Wild Card
   const wilds = ['Change', 'Draw4 & Change']
   wilds.forEach((w) => {
-    const card = { type: 'W', content: w }
+    const card = { type: 'W', content: w, color: 'black' }
     for (let i = 0; i < 4; i++) deck.push(card)
   })
 
