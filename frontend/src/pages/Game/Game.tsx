@@ -1,43 +1,20 @@
-import { useEffect, useRef, useState } from 'react'
-import { useHistory } from 'react-router-dom'
-import { useRecoilValue } from 'recoil'
+import { Redirect, useHistory } from 'react-router-dom'
+import { useGame, useGlobalState, useSocket } from '../../hooks'
+import { Message } from '../../helpers'
 import { Card } from '../../components'
-import { globalState } from '../../store'
-import { joinMessage } from '../../helpers'
-import { GameState } from '../../models/game.model'
 import { InMessage } from '../../models/message.model'
 import styles from './Game.module.css'
 
-const ENDPOINT = 'ws://localhost:5000'
+const URL = 'ws://localhost:5000'
 
 export const Game = () => {
-  type GameStatus = 'LOADING' | 'OK'
-  const [state, setState] = useState<GameStatus>('LOADING')
-
-  const global = useRecoilValue(globalState)
+  const [global, setGlobal] = useGlobalState()
   const history = useHistory()
-  if (!global.id) history.push('/')
-
-  const socket = useRef<WebSocket | null>(null)
-  const [game, setGame] = useState<GameState>({
-    myId: 0,
-    turn: 0,
-    direction: 'cw',
-    myCard: [],
-    players: [],
-  })
-
-  useEffect(() => {
-    socket.current = new WebSocket(ENDPOINT)
-    socket.current.onopen = joinRoom
-    socket.current.onmessage = handleMessage
-    return () => socket.current?.close()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
 
   const joinRoom = () => {
-    if (!socket.current) return history.push('/')
-    socket.current.send(joinMessage(global.myName, global.id))
+    if (!socket) return history.push('/')
+    const { myName, id } = global
+    socket.send(Message.join(myName, id))
   }
 
   function handleMessage(this: WebSocket, message: MessageEvent<any>) {
@@ -54,7 +31,7 @@ export const Game = () => {
             myId: playerId,
             myCard: cards,
           }))
-          setState('OK')
+          setGlobal((global) => ({ ...global, status: 'PLAYING' }))
         }
         break
 
@@ -75,7 +52,12 @@ export const Game = () => {
     }
   }
 
-  if (state === 'LOADING') return <div>Loading</div>
+  const socket = useSocket(URL, joinRoom, handleMessage)
+  const [game, setGame] = useGame()
+
+  // Render HTML
+  if (!global.id) return <Redirect to="/" />
+  if (global.status !== 'PLAYING') return <div>Loading</div>
 
   return (
     <>
