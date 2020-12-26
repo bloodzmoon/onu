@@ -16,7 +16,7 @@ const init = (server: Http.Server) => {
 
   const broadcast = (socket: WebSocket, game: Game, message: string) => {
     game.players.forEach((p) => {
-      if (p.socket !== socket) p.socket.send(message)
+      if (p.socket !== socket && p.socket) p.socket.send(message)
     })
   }
 
@@ -29,10 +29,15 @@ const init = (server: Http.Server) => {
           {
             const { gameId, playerName } = msg.payload
             const game = db.getGame(gameId)
-            const playerId = game.players.length
+            const playerId = game.getEmptyId()
             const player = new Player(playerId, playerName, socket)
-            const drawnCards = player.draw(game.deck, 5)
+            const oldCards = game.players[playerId].cards
+            const drawnCards = oldCards.length
+              ? oldCards
+              : player.draw(game.deck, 5)
+            player.cards = drawnCards
             game.addPlayer(player)
+
             socket.send(Message.init(game, playerId, drawnCards))
             broadcast(socket, game, Message.update(game))
 
@@ -47,7 +52,8 @@ const init = (server: Http.Server) => {
     })
 
     socket.on('close', () => {
-      db.disconnect(socket)
+      const game = db.disconnect(socket)
+      if (game) broadcast(socket, game, Message.update(game))
     })
   })
 }

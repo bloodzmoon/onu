@@ -13,6 +13,7 @@
   transition: 0.2s;
   color: white;
   background: #383433;
+  z-index: 1;
 }
 
 .hoverable:hover {
@@ -31,6 +32,8 @@
 
 .bot {
   align-self: flex-end;
+  transform: scale(-1, -1);
+  z-index: 0;
 }
 
 .red {

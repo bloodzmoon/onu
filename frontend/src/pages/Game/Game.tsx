@@ -86,7 +86,7 @@ export const Game = () => {
             <>
               <span className={styles.name}>{global.myName}</span>
               {game.myCard.map((c, i) => (
-                <Card key={i} data={c} canHover />
+                <Card key={`${p.id}${i}`} data={c} canHover />
               ))}
             </>
           ) : (
@@ -96,7 +96,7 @@ export const Game = () => {
                 .fill('')
                 .map((_, i) => (
                   <Card
-                    key={i}
+                    key={`${p.id}${i}`}
                     data={{ type: 'H', color: 'black', content: 'ONU' }}
                   />
                 ))}

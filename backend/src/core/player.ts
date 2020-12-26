@@ -4,14 +4,20 @@ import { Card } from '../models/card.model'
 class Player {
   readonly id: number
   readonly name: string
-  readonly socket: WebSocket
-  readonly cards: Card[]
+  readonly socket: WebSocket | null
+  public cards: Card[]
 
-  constructor(id: number, name: string, socket: WebSocket) {
+  constructor(id: number, name: string, socket: WebSocket | null) {
     this.id = id
     this.name = name
     this.socket = socket
     this.cards = []
+  }
+
+  static getNull(cards?: Card[]) {
+    const nullPlayer = new Player(-1, 'Waiting', null)
+    nullPlayer.cards = cards || []
+    return nullPlayer
   }
 
   show() {

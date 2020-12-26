@@ -12,7 +12,7 @@ class Game {
 
   constructor(id: string) {
     this.id = id
-    this.players = []
+    this.players = Array(4).fill(Player.getNull())
     this.deck = Deck.generateDeck()
     this.direction = 'cw'
     this.turn = 0
@@ -21,6 +21,15 @@ class Game {
   show() {
     console.log('#', this.id)
     this.players.forEach((p) => p.show())
+  }
+
+  getEmptyId() {
+    for (let i = 0; i < 4; i++) {
+      if (this.players[i].id === -1) {
+        return i
+      }
+    }
+    return -1
   }
 
   getPlayerBySocket(socket: WebSocket) {
@@ -37,13 +46,13 @@ class Game {
   }
 
   addPlayer(player: Player) {
-    const isExist = this.getPlayerBySocket(player.socket)
-    if (!isExist) this.players.push(player)
+    const isExist = this.getPlayerBySocket(player.socket!)
+    if (!isExist) this.players[player.id] = player
   }
 
   removePlayer(player: Player) {
     const index = this.players.indexOf(player)
-    if (index !== -1) this.players.splice(index, 1)
+    if (index !== -1) this.players[index] = Player.getNull(player.cards)
   }
 }
 
