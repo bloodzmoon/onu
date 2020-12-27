@@ -1,0 +1,29 @@
+.player {
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+.p0 {
+  grid-area: 3 / 2 / 4 / 3;
+}
+
+.p1 {
+  transform: rotate(90deg) translateY(12%);
+  grid-area: 2 / 1 / 3 / 2;
+}
+
+.p2 {
+  transform: rotate(180deg);
+  grid-area: 1 / 2 / 2 / 3;
+}
+
+.p3 {
+  transform: rotate(270deg) translateY(12%);
+  grid-area: 2 / 3 / 3 / 4;
+}
+
+.name {
+  position: absolute;
+  top: -2rem;
+}

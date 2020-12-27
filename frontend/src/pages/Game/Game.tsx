@@ -1,7 +1,7 @@
 import { Redirect } from 'react-router-dom'
 import { useGameState, useGlobalState, useWebSocket } from '../../hooks'
 import { Message } from '../../utils'
-import { Card } from '../../components'
+import { Deck, Player } from '../../components'
 import { InMessage } from '../../models/message'
 import styles from './Game.module.css'
 
@@ -58,37 +58,31 @@ export const Game = () => {
     }
   }
 
+  const sortPlayers = () => {
+    const sorted = [...game.players]
+    while (sorted[0].id !== game.myId) {
+      const player = sorted.shift()
+      sorted.push(player!)
+    }
+    return sorted
+  }
+
   // Render HTML
   if (!global.gameId) return <Redirect to="/" />
   if (game.status !== 'PLAYING') return <div>Loading</div>
 
   return (
     <>
-      <div className={styles.gameid}>Game ID {global.gameId}</div>
       <div className={styles.container}>
-        {game.players.map((p, i) => (
-          <div key={p.id} className={`${styles.player} ${styles[`p${i}`]}`}>
-            {p.id === game.myId ? (
-              <>
-                <span className={styles.name}>{global.myName}</span>
-                {game.myCard.map((c, i) => (
-                  <Card key={`${p.id}${i}`} data={c} canHover />
-                ))}
-              </>
-            ) : (
-              <>
-                <span className={styles.name}>{p.name}</span>
-                {Array(p.cardCount)
-                  .fill('')
-                  .map((_, i) => (
-                    <Card
-                      key={`${p.id}${i}`}
-                      data={{ type: 'H', color: 'black', content: 'ONU' }}
-                    />
-                  ))}
-              </>
-            )}
-          </div>
+        <div className={styles.gameid}>Game ID {global.gameId}</div>
+        <Deck direction={game.direction} />
+        {sortPlayers().map((p, i) => (
+          <Player
+            key={`player${p.id}${i}`}
+            player={p}
+            position={i}
+            myCards={p.id === game.myId ? game.myCard : null}
+          />
         ))}
       </div>
     </>

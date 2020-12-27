@@ -1,0 +1,23 @@
+.container {
+  grid-area: 2 / 2 / 3 / 3;
+  position: relative;
+}
+
+.direction {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 56rem;
+  color: #e4e4e4;
+  animation: spin 18s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}

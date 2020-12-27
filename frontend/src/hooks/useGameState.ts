@@ -1,22 +1,9 @@
 import { useCallback, useState } from 'react'
-import { Card } from '../models/card'
+import { GameState } from '../models/game'
 
 /**
  * Shorthand ...because im lazy
  */
-interface GameState {
-  status: 'LOADING' | 'PLAYING'
-  turn: number
-  direction: 'cw' | 'ccw'
-  players: {
-    id: number
-    name: string
-    cardCount: number
-  }[]
-  myId: number
-  myCard: Card[]
-}
-
 export const useGameState = () => {
   const [game, setGame] = useState<GameState>({
     status: 'LOADING',

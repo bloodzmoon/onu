@@ -16,6 +16,8 @@ export const useWebSocket = (
     socket.current = new WebSocket(url)
     socket.current.onopen = handleOpen
     socket.current.onmessage = handleMessage
+
+    return () => socket.current?.close()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
