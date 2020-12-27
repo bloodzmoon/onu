@@ -1,44 +1,50 @@
-import { Redirect, useHistory } from 'react-router-dom'
-import { useGame, useGlobalState, useSocket } from '../../hooks'
-import { Message } from '../../helpers'
+import { Redirect } from 'react-router-dom'
+import { useGameState, useGlobalState, useWebSocket } from '../../hooks'
+import { Message } from '../../utils'
 import { Card } from '../../components'
-import { InMessage } from '../../models/message.model'
+import { InMessage } from '../../models/message'
 import styles from './Game.module.css'
 
 const URL = 'ws://localhost:5000'
 
+/**
+ * This is the game route `/game`
+ * Everything will happen here in this page
+ * that's why this file has a lot of code <3
+ */
 export const Game = () => {
-  const [global, setGlobal] = useGlobalState()
-  const history = useHistory()
+  const global = useGlobalState()
+  const game = useGameState()
+  const socket = useWebSocket(URL, joinRoom, handleMessage)
 
-  const joinRoom = () => {
-    if (!socket) return history.push('/')
-    const { myName, id } = global
-    socket.send(Message.join(myName, id))
+  function joinRoom() {
+    if (!socket) return
+    const { myName, gameId } = global
+    socket.send(Message.join(myName, gameId))
   }
 
   function handleMessage(this: WebSocket, message: MessageEvent<any>) {
     const msg: InMessage = JSON.parse(message.data)
-    switch (msg.action) {
+    switch (msg.type) {
       case 'init':
         {
           const { turn, direction, playerId, players, cards } = msg.payload
-          setGame((game) => ({
+          game.set((game) => ({
             ...game,
             turn,
             direction,
             players,
             myId: playerId,
             myCard: cards,
+            status: 'PLAYING',
           }))
-          setGlobal((global) => ({ ...global, status: 'PLAYING' }))
         }
         break
 
       case 'update':
         {
           const { turn, direction, players } = msg.payload
-          setGame((game) => ({
+          game.set((game) => ({
             ...game,
             turn,
             direction,
@@ -52,16 +58,13 @@ export const Game = () => {
     }
   }
 
-  const socket = useSocket(URL, joinRoom, handleMessage)
-  const [game, setGame] = useGame()
-
   // Render HTML
-  if (!global.id) return <Redirect to="/" />
-  if (global.status !== 'PLAYING') return <div>Loading</div>
+  if (!global.gameId) return <Redirect to="/" />
+  if (game.status !== 'PLAYING') return <div>Loading</div>
 
   return (
     <>
-      <div className={styles.gameid}>Game ID {global.id}</div>
+      <div className={styles.gameid}>Game ID {global.gameId}</div>
       <div className={styles.container}>
         {game.players.map((p, i) => (
           <div key={p.id} className={`${styles.player} ${styles[`p${i}`]}`}>

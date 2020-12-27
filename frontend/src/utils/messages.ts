@@ -1,8 +1,8 @@
-import { OutMessage } from '../models/message.model'
+import { OutMessage } from '../models/message'
 
 const join = (playerName: string, gameId: string) => {
   const msg: OutMessage = {
-    action: 'join',
+    type: 'join',
     payload: { playerName, gameId },
   }
   return JSON.stringify(msg)

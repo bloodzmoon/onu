@@ -4,7 +4,7 @@ import Database from './core/db'
 import Game from './core/game'
 import Player from './core/player'
 import Message from './utils/message'
-import { InMessage } from './models/message.model'
+import { InMessage } from './models/message'
 
 /**
  * Create a WebSocket Server that will handle
@@ -24,7 +24,7 @@ const init = (server: Http.Server) => {
     socket.on('message', (message: string) => {
       const msg: InMessage = JSON.parse(message)
 
-      switch (msg.action) {
+      switch (msg.type) {
         case 'join':
           {
             const { gameId, playerName } = msg.payload

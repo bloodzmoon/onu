@@ -1,4 +1,4 @@
-import { Card as ICard } from '../../models/card.model'
+import { Card as ICard } from '../../models/card'
 import styles from './Card.module.css'
 
 interface Props {

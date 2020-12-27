@@ -1,7 +1,7 @@
 import WebSocket from 'ws'
 import Player from './player'
 import Deck from '../utils/deck'
-import { Card } from '../models/card.model'
+import { Card } from '../models/card'
 
 /**
  * Game will contains all information about

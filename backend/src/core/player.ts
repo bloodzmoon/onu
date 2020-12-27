@@ -1,5 +1,5 @@
 import WebSocket from 'ws'
-import { Card } from '../models/card.model'
+import { Card } from '../models/card'
 
 class Player {
   readonly id: number

@@ -8,8 +8,7 @@ function App() {
       <BrowserRouter>
         <Switch>
           <Route exact path="/" component={Home} />
-          <Route exact path="/game" component={Game} />
-          <Route path="/" component={() => <div>Not found</div>} />
+          <Route path="/game" component={Game} />
         </Switch>
       </BrowserRouter>
     </RecoilRoot>

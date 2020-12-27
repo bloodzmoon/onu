@@ -1,10 +1,23 @@
-import { Card } from './card.model'
+import { Card } from './card'
 
 /**
  * Outgoing message
  */
+interface JoinMessage {
+  type: 'join'
+  payload: {
+    playerName: string
+    gameId: string
+  }
+}
+
+export type OutMessage = JoinMessage
+
+/**
+ * Incoming message
+ */
 interface InitMessage {
-  action: 'init'
+  type: 'init'
   payload: {
     turn: number
     direction: 'cw' | 'ccw'
@@ -19,7 +32,7 @@ interface InitMessage {
 }
 
 interface UpdateMessage {
-  action: 'update'
+  type: 'update'
   payload: {
     turn: number
     direction: 'cw' | 'ccw'
@@ -31,17 +44,4 @@ interface UpdateMessage {
   }
 }
 
-export type OutMessage = InitMessage | UpdateMessage
-
-/**
- * Incoming message
- */
-interface JoinMessage {
-  action: 'join'
-  payload: {
-    playerName: string
-    gameId: string
-  }
-}
-
-export type InMessage = JoinMessage
+export type InMessage = InitMessage | UpdateMessage

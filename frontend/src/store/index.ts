@@ -5,16 +5,14 @@ import { atom } from 'recoil'
  * This global state store `GameID` and `PlayerName`
  */
 interface GlobalState {
-  id: string
+  gameId: string
   myName: string
-  status: 'ENTER_NAME' | 'ENTER_GAME_ID' | 'LOADING' | 'PLAYING'
 }
 
 export const globalState = atom<GlobalState>({
   key: 'globalState',
   default: {
-    id: '',
+    gameId: '',
     myName: '',
-    status: 'ENTER_NAME',
   },
 })

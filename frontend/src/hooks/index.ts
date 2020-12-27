@@ -1,3 +1,3 @@
-export { useGame } from './useGame'
+export { useGameState } from './useGameState'
 export { useGlobalState } from './useGlobalState'
-export { useSocket } from './useSocket'
+export { useWebSocket } from './useWebSocket'
