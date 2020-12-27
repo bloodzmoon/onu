@@ -1,16 +1,16 @@
 import { Card } from './card'
 
-export interface Player {
-  id: number
-  name: string
-  cardCount: number
-}
+export type GameStatus = 'loading' | 'waiting' | 'playing'
 
 export interface GameState {
-  status: 'LOADING' | 'PLAYING'
+  status: GameStatus
   turn: number
   direction: 'cw' | 'ccw'
-  players: Player[]
+  players: {
+    id: number
+    name: string
+    cardCount: number
+  }[]
   myId: number
   myCard: Card[]
 }

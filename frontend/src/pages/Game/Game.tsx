@@ -36,19 +36,20 @@ export const Game = () => {
             players,
             myId: playerId,
             myCard: cards,
-            status: 'PLAYING',
+            status: 'playing',
           }))
         }
         break
 
       case 'update':
         {
-          const { turn, direction, players } = msg.payload
+          const { turn, direction, players, state } = msg.payload
           game.set((game) => ({
             ...game,
             turn,
             direction,
             players,
+            status: state,
           }))
         }
         break
@@ -58,30 +59,22 @@ export const Game = () => {
     }
   }
 
-  const sortPlayers = () => {
-    const sorted = [...game.players]
-    while (sorted[0].id !== game.myId) {
-      const player = sorted.shift()
-      sorted.push(player!)
-    }
-    return sorted
-  }
-
   // Render HTML
   if (!global.gameId) return <Redirect to="/" />
-  if (game.status !== 'PLAYING') return <div>Loading</div>
+  if (game.status === 'loading') return <div>Loading</div>
 
   return (
     <>
       <div className={styles.container}>
         <div className={styles.gameid}>Game ID {global.gameId}</div>
         <Deck direction={game.direction} />
-        {sortPlayers().map((p, i) => (
+        {game.sortedPlayer().map((p, i) => (
           <Player
             key={`player${p.id}${i}`}
             player={p}
             position={i}
             myCards={p.id === game.myId ? game.myCard : null}
+            disabled={!game.isPlaying(p.id)}
           />
         ))}
       </div>

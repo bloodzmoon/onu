@@ -4,6 +4,11 @@
   justify-content: center;
 }
 
+.disabled {
+  pointer-events: none;
+  filter: brightness(50%);
+}
+
 .p0 {
   grid-area: 3 / 2 / 4 / 3;
 }
@@ -26,4 +31,15 @@
 .name {
   position: absolute;
   top: -2rem;
+  padding: 0.25rem 1rem;
+  border-radius: 1rem;
+  font-weight: bold;
+  transition: 0.2s;
+}
+
+.playing {
+  top: -3rem;
+  font-size: 1.2rem;
+  color: white;
+  background: #383433;
 }

@@ -34,6 +34,7 @@ interface InitMessage {
 interface UpdateMessage {
   type: 'update'
   payload: {
+    state: 'waiting' | 'playing'
     turn: number
     direction: 'cw' | 'ccw'
     players: {

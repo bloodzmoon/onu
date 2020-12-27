@@ -29,6 +29,7 @@ const update = (game: Game) => {
   const message: OutMessage = {
     type: 'update',
     payload: {
+      state: game.state,
       turn: game.turn,
       direction: game.direction,
       players: game.getPlayersData(),

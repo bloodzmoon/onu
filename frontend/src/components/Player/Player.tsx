@@ -1,6 +1,6 @@
 import { useGlobalState } from '../../hooks'
-import { Card } from '../Card/Card'
 import { Card as ICard } from '../../models/card'
+import { Card } from '../Card/Card'
 import styles from './Player.module.css'
 
 interface Props {
@@ -11,16 +11,22 @@ interface Props {
   }
   position: number
   myCards?: ICard[] | null
+  disabled?: boolean
 }
 
-export const Player = ({ player, position, myCards }: Props) => {
+export const Player = ({ player, position, myCards, disabled }: Props) => {
   const global = useGlobalState()
+  const playerStyles = `${styles.player} ${styles[`p${position}`]} ${
+    disabled && styles.disabled
+  }`
+  const nameStyles = `${styles.name} ${!disabled && styles.playing}`
 
   return (
-    <div className={`${styles.player} ${styles[`p${position}`]}`}>
+    <div className={playerStyles}>
       {myCards ? (
+        // My Cards
         <>
-          <span className={styles.name}>{global.myName}</span>
+          <span className={nameStyles}>{global.myName}</span>
           {myCards.map((c, i) => (
             <Card
               key={`${c.type + c.color + c.content}${i}`}
@@ -30,8 +36,9 @@ export const Player = ({ player, position, myCards }: Props) => {
           ))}
         </>
       ) : (
+        // Other player cards
         <>
-          <span className={styles.name}>{player.name}</span>
+          <span className={nameStyles}>{player.name}</span>
           {Array(player.cardCount)
             .fill('')
             .map((_, i) => (

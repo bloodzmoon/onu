@@ -4,16 +4,18 @@ import styles from './Card.module.css'
 interface Props {
   data: ICard
   canHover?: boolean
+  disabled?: boolean
 }
 
 export const Card = ({
   data: { color, content, type },
   canHover = false,
+  disabled = false,
 }: Props) => {
   const isShown = type !== 'H'
   const cardStyles = `${styles.card} ${styles[color]} ${
     canHover && styles.hoverable
-  }`
+  } ${disabled && styles.disabled}`
 
   return (
     <div className={cardStyles}>

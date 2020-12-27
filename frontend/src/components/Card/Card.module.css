@@ -21,6 +21,11 @@
   cursor: pointer;
 }
 
+.disabled {
+  pointer-events: none;
+  filter: brightness(50%);
+}
+
 .top {
   align-self: flex-start;
 }

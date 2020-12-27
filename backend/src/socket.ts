@@ -38,6 +38,7 @@ const init = (server: Http.Server) => {
             player.cards = drawnCards
             game.addPlayer(player)
 
+            game.state = game.isGameFull() ? 'playing' : 'waiting'
             socket.send(Message.init(game, playerId, drawnCards))
             broadcast(socket, game, Message.update(game))
 

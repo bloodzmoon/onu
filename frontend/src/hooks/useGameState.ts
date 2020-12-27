@@ -1,12 +1,12 @@
 import { useCallback, useState } from 'react'
-import { GameState } from '../models/game'
+import { GameState, GameStatus } from '../models/game'
 
 /**
  * Shorthand ...because im lazy
  */
 export const useGameState = () => {
   const [game, setGame] = useState<GameState>({
-    status: 'LOADING',
+    status: 'loading',
     myId: 0,
     turn: 0,
     direction: 'cw',
@@ -15,11 +15,28 @@ export const useGameState = () => {
   })
 
   const setStatus = useCallback(
-    (status: 'LOADING' | 'PLAYING') => {
+    (status: GameStatus) => {
       setGame((game) => ({ ...game, status }))
     },
     [setGame]
   )
 
-  return { ...game, set: setGame, setStatus }
+  /**
+   * This will make `you` to be first index
+   * of the player array
+   */
+  const sortedPlayer = () => {
+    const sorted = [...game.players]
+    while (sorted[0].id !== game.myId) {
+      const player = sorted.shift()
+      sorted.push(player!)
+    }
+    return sorted
+  }
+
+  const isPlaying = (playerId: number) => {
+    return game.turn === playerId
+  }
+
+  return { ...game, set: setGame, setStatus, sortedPlayer, isPlaying }
 }
