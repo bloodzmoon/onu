@@ -5,9 +5,9 @@ This is Uno card game clone
 ### Todo
 - [x] Create room (Manual)
 - [x] Join room (Manual)
-- [ ] Create room from UI
-- [ ] Join room from UI
-- [ ] Card design
+- [x] Create room from UI
+- [x] Join room from UI
+- [x] Card design
 - [ ] Basic gameplay
 - [ ] Special mode
 
