@@ -13,6 +13,10 @@
   animation: spin 18s linear infinite;
 }
 
+.rev {
+  animation: spin2 18s linear infinite;
+}
+
 .deck {
   position: absolute;
   top: 50%;
@@ -47,5 +51,14 @@
   }
   to {
     transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+@keyframes spin2 {
+  from {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(0deg);
   }
 }

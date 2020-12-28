@@ -11,11 +11,14 @@ interface Props {
 }
 
 export const Deck = ({ lastestCard, direction, disabled, drawCard }: Props) => {
-  const Direction = direction === 'cw' ? FiRefreshCw : FiRefreshCcw
+  const isReversed = direction === 'ccw'
+  const Direction = isReversed ? FiRefreshCcw : FiRefreshCw
 
   return (
     <div className={`${styles.container} ${disabled && styles.disabled}`}>
-      <Direction className={styles.direction} />
+      <Direction
+        className={`${styles.direction} ${isReversed && styles.rev}`}
+      />
       <div className={styles.deck}>
         <Card
           data={{ type: 'H', color: 'black', content: 'ONU' }}

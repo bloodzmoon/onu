@@ -14,10 +14,8 @@ const init = (server: Http.Server) => {
   const wss = new WebSocket.Server({ server })
   const db = new Database()
 
-  const broadcast = (socket: WebSocket, game: Game, message: string) => {
-    game.players.forEach((p) => {
-      if (p.socket !== socket && p.socket) p.socket.send(message)
-    })
+  const broadcast = (game: Game, message: string) => {
+    game.players.forEach((p) => p?.socket?.send(message))
   }
 
   wss.on('connection', (socket) => {
@@ -40,10 +38,7 @@ const init = (server: Http.Server) => {
 
             game.state = game.isGameFull() ? 'playing' : 'waiting'
             socket.send(Message.init(game, playerId, drawnCards))
-            if (game.state === 'playing') {
-              socket.send(Message.update(game))
-            }
-            broadcast(socket, game, Message.update(game))
+            broadcast(game, Message.update(game))
           }
           break
 
@@ -59,14 +54,25 @@ const init = (server: Http.Server) => {
               player.play(card)
               game.playedCards.push(card)
               switch (card.content) {
+                case 'Rev':
+                  game.changeDirection()
+                  break
                 case 'Skip':
                   game.nextTurn()
                   break
+                case '+2':
+                  {
+                    const nextPlayer = game.getNextPlayer()
+                    const cards = nextPlayer.draw(game.deck, 2)
+                    nextPlayer.socket?.send(Message.draw(cards))
+                    game.nextTurn()
+                  }
+                  break
               }
-              broadcast(socket, game, Message.card(card))
+              broadcast(game, Message.card(card))
             }
             game.nextTurn()
-            broadcast(socket, game, Message.update(game))
+            broadcast(game, Message.update(game))
           }
           break
 
@@ -79,7 +85,7 @@ const init = (server: Http.Server) => {
       const game: Game | null = db.disconnect(socket)
       if (game) {
         game!.state = game!.isGameFull() ? 'playing' : 'stopping'
-        broadcast(socket, game, Message.update(game))
+        broadcast(game, Message.update(game))
         if (game!.isGameEmpty()) db.removeGame(game)
       }
     })

@@ -75,7 +75,19 @@ class Game {
   nextTurn() {
     const unit = this.direction === 'cw' ? +1 : -1
     this.turn = (this.turn + unit) % 4
-    if (this.turn === -1) this.turn = 3
+    if (this.turn < 0) this.turn = 4 + this.turn
+  }
+
+  changeDirection() {
+    const newDir = this.direction === 'cw' ? 'ccw' : 'cw'
+    this.direction = newDir
+  }
+
+  getNextPlayer() {
+    const unit = this.direction === 'cw' ? +1 : -1
+    let next = (this.turn + unit) % 4
+    if (next < 0) next = 4 + next
+    return this.players[next]
   }
 
   getLastestCard() {
