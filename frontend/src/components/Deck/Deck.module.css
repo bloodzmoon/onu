@@ -13,6 +13,25 @@
   animation: spin 18s linear infinite;
 }
 
+.deck {
+  position: absolute;
+  top: 50%;
+  left: 35%;
+  transform: translate(-50%, -50%);
+  width: 135px;
+  height: 202.5px;
+  border-radius: 0.75rem;
+  cursor: pointer;
+}
+
+.deck:hover {
+  box-shadow: 0 0 15px rgb(0, 204, 255);
+}
+
+.disabled {
+  pointer-events: none;
+}
+
 @keyframes spin {
   from {
     transform: translate(-50%, -50%) rotate(0deg);

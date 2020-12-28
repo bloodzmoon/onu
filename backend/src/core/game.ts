@@ -12,6 +12,7 @@ class Game {
   readonly id: string
   readonly players: Player[]
   readonly deck: Card[]
+  readonly playedCards: Card[]
   public direction: 'cw' | 'ccw'
   public turn: number
   public state: 'waiting' | 'playing'
@@ -20,6 +21,7 @@ class Game {
     this.id = id
     this.players = Array(4).fill(Player.getNull())
     this.deck = Deck.generateDeck()
+    this.playedCards = []
     this.direction = 'cw'
     this.turn = 0
     this.state = 'waiting'
@@ -64,6 +66,12 @@ class Game {
   removePlayer(player: Player) {
     const index = this.players.indexOf(player)
     if (index !== -1) this.players[index] = Player.getNull(player.cards)
+  }
+
+  nextTurn() {
+    const unit = this.direction === 'cw' ? +1 : -1
+    this.turn = (this.turn + unit) % 4
+    if (this.turn === -1) this.turn = 3
   }
 }
 

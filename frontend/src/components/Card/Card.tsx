@@ -5,12 +5,14 @@ interface Props {
   data: ICard
   canHover?: boolean
   disabled?: boolean
+  onClick?: () => void
 }
 
 export const Card = ({
   data: { color, content, type },
   canHover = false,
   disabled = false,
+  onClick,
 }: Props) => {
   const isShown = type !== 'H'
   const cardStyles = `${styles.card} ${styles[color]} ${
@@ -18,7 +20,7 @@ export const Card = ({
   } ${disabled && styles.disabled}`
 
   return (
-    <div className={cardStyles}>
+    <div className={cardStyles} onClick={onClick}>
       <span className={styles.top}>{isShown && content}</span>
       <span className={styles.mid}>{content}</span>
       <span className={styles.bot}>{isShown && content}</span>

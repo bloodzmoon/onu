@@ -38,7 +38,29 @@ const update = (game: Game) => {
   return JSON.stringify(message)
 }
 
+const draw = (cards: Card[]) => {
+  const message: OutMessage = {
+    type: 'draw',
+    payload: {
+      cards,
+    },
+  }
+  return JSON.stringify(message)
+}
+
+const card = (card: Card) => {
+  const message: OutMessage = {
+    type: 'card',
+    payload: {
+      card,
+    },
+  }
+  return JSON.stringify(message)
+}
+
 export default {
   init,
   update,
+  draw,
+  card,
 }

@@ -23,6 +23,11 @@ export const Game = () => {
     socket.send(Message.join(myName, gameId))
   }
 
+  function drawCard() {
+    socket.send(Message.play(global.gameId, game.myId, null))
+    game.nextTurn()
+  }
+
   function handleMessage(this: WebSocket, message: MessageEvent<any>) {
     const msg: InMessage = JSON.parse(message.data)
     switch (msg.type) {
@@ -36,7 +41,7 @@ export const Game = () => {
             players,
             myId: playerId,
             myCard: cards,
-            status: 'playing',
+            status: 'waiting',
           }))
         }
         break
@@ -54,6 +59,20 @@ export const Game = () => {
         }
         break
 
+      case 'draw':
+        {
+          const { cards } = msg.payload
+          game.addMyCard(cards)
+        }
+        break
+
+      case 'card':
+        {
+          const { card } = msg.payload
+          game.addPlayedCard(card)
+        }
+        break
+
       default:
         break
     }
@@ -66,8 +85,15 @@ export const Game = () => {
   return (
     <>
       <div className={styles.container}>
+        {game.status === 'waiting' && (
+          <div className={styles.wait}>Waiting for player</div>
+        )}
         <div className={styles.gameid}>Game ID {global.gameId}</div>
-        <Deck direction={game.direction} />
+        <Deck
+          direction={game.direction}
+          disabled={!game.isPlaying(game.myId)}
+          drawCard={drawCard}
+        />
         {game.sortedPlayer().map((p, i) => (
           <Player
             key={`player${p.id}${i}`}

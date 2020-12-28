@@ -33,12 +33,13 @@ class Database {
 
   disconnect(socket: WebSocket) {
     let fromGame: Game | null = null
-    this.games.forEach((g) => {
+    this.games.some((g) => {
       const player = g.getPlayerBySocket(socket)
       if (player) {
         fromGame = g
         g.removePlayer(player)
-        console.log(`! ${player.name} has left game ${g.id}`)
+        return true
+        // console.log(`! ${player.name} has left game ${g.id}`)
       }
     })
     return fromGame

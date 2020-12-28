@@ -1,3 +1,4 @@
+import { Card } from '../models/card'
 import { OutMessage } from '../models/message'
 
 const join = (playerName: string, gameId: string) => {
@@ -8,6 +9,15 @@ const join = (playerName: string, gameId: string) => {
   return JSON.stringify(msg)
 }
 
+const play = (gameId: string, playerId: number, card: Card | null) => {
+  const msg: OutMessage = {
+    type: 'play',
+    payload: { gameId, playerId, card },
+  }
+  return JSON.stringify(msg)
+}
+
 export const Message = {
   join,
+  play,
 }

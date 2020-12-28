@@ -32,7 +32,21 @@ interface UpdateMessage {
   }
 }
 
-export type OutMessage = InitMessage | UpdateMessage
+interface DrawMessage {
+  type: 'draw'
+  payload: {
+    cards: Card[]
+  }
+}
+
+interface CardMessage {
+  type: 'card'
+  payload: {
+    card: Card
+  }
+}
+
+export type OutMessage = InitMessage | UpdateMessage | DrawMessage | CardMessage
 
 /**
  * Incoming message
@@ -45,4 +59,13 @@ interface JoinMessage {
   }
 }
 
-export type InMessage = JoinMessage
+interface PlayMessage {
+  type: 'play'
+  payload: {
+    gameId: string
+    playerId: number
+    card: Card | null
+  }
+}
+
+export type InMessage = JoinMessage | PlayMessage

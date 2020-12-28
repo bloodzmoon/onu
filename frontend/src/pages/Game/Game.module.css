@@ -15,3 +15,13 @@
   justify-content: flex-end;
   margin: 2rem;
 }
+
+.wait {
+  grid-area: 1 / 1 / 4 / 4;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+  font-size: 10rem;
+  background: rgba(255, 255, 255, 0.8);
+}

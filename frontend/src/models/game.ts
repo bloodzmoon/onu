@@ -6,6 +6,7 @@ export interface GameState {
   status: GameStatus
   turn: number
   direction: 'cw' | 'ccw'
+  playedCards: Card[]
   players: {
     id: number
     name: string

@@ -40,10 +40,24 @@ const init = (server: Http.Server) => {
 
             game.state = game.isGameFull() ? 'playing' : 'waiting'
             socket.send(Message.init(game, playerId, drawnCards))
+            if (game.state === 'playing') socket.send(Message.update(game))
             broadcast(socket, game, Message.update(game))
+          }
+          break
 
-            console.log('----')
-            db.show()
+        case 'play':
+          {
+            const { gameId, playerId, card } = msg.payload
+            const game = db.getGame(gameId)
+            const player = game.players[playerId]
+            if (!card) {
+              const cards = player.draw(game.deck, 1)
+              socket.send(Message.draw(cards))
+              game.nextTurn()
+            } else {
+              broadcast(socket, game, Message.card(card))
+            }
+            broadcast(socket, game, Message.update(game))
           }
           break
 
@@ -53,8 +67,11 @@ const init = (server: Http.Server) => {
     })
 
     socket.on('close', () => {
-      const game = db.disconnect(socket)
-      if (game) broadcast(socket, game, Message.update(game))
+      const game: Game | null = db.disconnect(socket)
+      if (game) {
+        game!.state = game!.isGameFull() ? 'playing' : 'waiting'
+        broadcast(socket, game, Message.update(game))
+      }
     })
   })
 }
