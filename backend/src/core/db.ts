@@ -27,6 +27,11 @@ class Database {
     return game
   }
 
+  removeGame(id: string) {
+    const index = this.games.findIndex((g) => g.id === id)
+    this.games.splice(index, 1)
+  }
+
   isExist(id: string) {
     return this.games.find((g) => g.id === id) !== undefined
   }

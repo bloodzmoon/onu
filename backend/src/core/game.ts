@@ -15,7 +15,7 @@ class Game {
   readonly playedCards: Card[]
   public direction: 'cw' | 'ccw'
   public turn: number
-  public state: 'waiting' | 'playing'
+  public state: 'waiting' | 'playing' | 'stopping'
 
   constructor(id: string) {
     this.id = id
@@ -43,6 +43,10 @@ class Game {
 
   isGameFull() {
     return this.getEmptyId() === -1
+  }
+
+  isGameEmpty() {
+    return this.players.every((p) => p.id === -1)
   }
 
   getPlayerBySocket(socket: WebSocket) {

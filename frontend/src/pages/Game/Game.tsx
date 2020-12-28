@@ -85,7 +85,7 @@ export const Game = () => {
   return (
     <>
       <div className={styles.container}>
-        {game.status === 'waiting' && (
+        {game.status !== 'playing' && (
           <div className={styles.wait}>Waiting for player</div>
         )}
         <div className={styles.gameid}>Game ID {global.gameId}</div>

@@ -40,7 +40,9 @@ const init = (server: Http.Server) => {
 
             game.state = game.isGameFull() ? 'playing' : 'waiting'
             socket.send(Message.init(game, playerId, drawnCards))
-            if (game.state === 'playing') socket.send(Message.update(game))
+            if (game.state === 'playing') {
+              socket.send(Message.update(game))
+            }
             broadcast(socket, game, Message.update(game))
           }
           break
@@ -69,8 +71,9 @@ const init = (server: Http.Server) => {
     socket.on('close', () => {
       const game: Game | null = db.disconnect(socket)
       if (game) {
-        game!.state = game!.isGameFull() ? 'playing' : 'waiting'
+        game!.state = game!.isGameFull() ? 'playing' : 'stopping'
         broadcast(socket, game, Message.update(game))
+        if (game!.isGameEmpty()) db.removeGame(game)
       }
     })
   })
