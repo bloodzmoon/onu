@@ -54,7 +54,19 @@ const shuffle = (array: any[]) => {
   return array
 }
 
+/**
+ * Get the first Number card from deck
+ */
+const getFirstCard = (cards: Card[]) => {
+  while (true) {
+    const card = cards.pop()
+    if (card?.type === 'N') return card
+    cards.push(card!)
+  }
+}
+
 export default {
   generateDeck,
   shuffle,
+  getFirstCard,
 }

@@ -21,7 +21,7 @@ class Game {
     this.id = id
     this.players = Array(4).fill(Player.getNull())
     this.deck = Deck.generateDeck()
-    this.playedCards = Array(1).fill(this.deck.pop())
+    this.playedCards = [Deck.getFirstCard(this.deck)]
     this.direction = 'cw'
     this.turn = 0
     this.state = 'waiting'
