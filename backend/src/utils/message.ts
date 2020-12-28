@@ -15,6 +15,7 @@ const init = (game: Game, playerId: number, cards: Card[]) => {
       players: game.getPlayersData(),
       playerId,
       cards,
+      playedCard: game.getLastestCard(),
     },
   }
   return JSON.stringify(message)

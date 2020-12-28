@@ -37,6 +37,7 @@ interface InitMessage {
     }[]
     playerId: number
     cards: Card[]
+    playedCard: Card
   }
 }
 

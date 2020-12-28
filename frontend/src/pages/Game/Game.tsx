@@ -3,6 +3,7 @@ import { useGameState, useGlobalState, useWebSocket } from '../../hooks'
 import { Message } from '../../utils'
 import { Deck, Player } from '../../components'
 import { InMessage } from '../../models/message'
+import { Card } from '../../models/card'
 import styles from './Game.module.css'
 
 const URL = 'ws://localhost:5000'
@@ -28,12 +29,25 @@ export const Game = () => {
     game.nextTurn()
   }
 
+  function playCard(card: Card) {
+    socket.send(Message.play(global.gameId, game.myId, card))
+    game.playMyCard(card)
+    game.nextTurn()
+  }
+
   function handleMessage(this: WebSocket, message: MessageEvent<any>) {
     const msg: InMessage = JSON.parse(message.data)
     switch (msg.type) {
       case 'init':
         {
-          const { turn, direction, playerId, players, cards } = msg.payload
+          const {
+            turn,
+            direction,
+            playerId,
+            players,
+            cards,
+            playedCard,
+          } = msg.payload
           game.set((game) => ({
             ...game,
             turn,
@@ -42,6 +56,7 @@ export const Game = () => {
             myId: playerId,
             myCard: cards,
             status: 'waiting',
+            playedCard,
           }))
         }
         break
@@ -69,7 +84,7 @@ export const Game = () => {
       case 'card':
         {
           const { card } = msg.payload
-          game.addPlayedCard(card)
+          game.setPlayedCard(card)
         }
         break
 
@@ -90,6 +105,7 @@ export const Game = () => {
         )}
         <div className={styles.gameid}>Game ID {global.gameId}</div>
         <Deck
+          lastestCard={game.playedCard!}
           direction={game.direction}
           disabled={!game.isPlaying(game.myId)}
           drawCard={drawCard}
@@ -101,6 +117,8 @@ export const Game = () => {
             position={i}
             myCards={p.id === game.myId ? game.myCard : null}
             disabled={!game.isPlaying(p.id)}
+            playCard={playCard}
+            isCardPlayable={game.isCardPlayable}
           />
         ))}
       </div>

@@ -1,14 +1,16 @@
 import { FiRefreshCw, FiRefreshCcw } from 'react-icons/fi'
 import { Card } from '../Card/Card'
+import { Card as ICard } from '../../models/card'
 import styles from './Deck.module.css'
 
 interface Props {
+  lastestCard: ICard
   direction: 'cw' | 'ccw'
   disabled?: boolean
   drawCard: () => void
 }
 
-export const Deck = ({ direction, disabled, drawCard }: Props) => {
+export const Deck = ({ lastestCard, direction, disabled, drawCard }: Props) => {
   const Direction = direction === 'cw' ? FiRefreshCw : FiRefreshCcw
 
   return (
@@ -20,6 +22,9 @@ export const Deck = ({ direction, disabled, drawCard }: Props) => {
           disabled={disabled}
           onClick={drawCard}
         />
+      </div>
+      <div className={styles.lastest}>
+        <Card data={lastestCard} />
       </div>
     </div>
   )

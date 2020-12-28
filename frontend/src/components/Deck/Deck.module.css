@@ -28,6 +28,15 @@
   box-shadow: 0 0 15px rgb(0, 204, 255);
 }
 
+.lastest {
+  position: absolute;
+  top: 50%;
+  left: 65%;
+  transform: translate(-50%, -50%);
+  width: 135px;
+  height: 202.5px;
+}
+
 .disabled {
   pointer-events: none;
 }

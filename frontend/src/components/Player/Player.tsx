@@ -12,9 +12,18 @@ interface Props {
   position: number
   myCards?: ICard[] | null
   disabled?: boolean
+  playCard?: (card: ICard) => void
+  isCardPlayable?: (card: ICard) => boolean
 }
 
-export const Player = ({ player, position, myCards, disabled }: Props) => {
+export const Player = ({
+  player,
+  position,
+  myCards,
+  disabled,
+  playCard,
+  isCardPlayable,
+}: Props) => {
   const global = useGlobalState()
   const playerStyles = `${styles.player} ${styles[`p${position}`]} ${
     disabled && styles.disabled
@@ -32,6 +41,8 @@ export const Player = ({ player, position, myCards, disabled }: Props) => {
               key={`${c.type + c.color + c.content}${i}`}
               data={c}
               canHover
+              onClick={playCard && (() => playCard(c))}
+              disabled={isCardPlayable && !isCardPlayable(c)}
             />
           ))}
         </>

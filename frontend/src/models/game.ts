@@ -6,7 +6,7 @@ export interface GameState {
   status: GameStatus
   turn: number
   direction: 'cw' | 'ccw'
-  playedCards: Card[]
+  playedCard: Card | null
   players: {
     id: number
     name: string

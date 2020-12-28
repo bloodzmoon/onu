@@ -11,7 +11,7 @@ export const useGameState = () => {
     myId: 0,
     turn: 0,
     direction: 'cw',
-    playedCards: [],
+    playedCard: null,
     myCard: [],
     players: [],
   })
@@ -47,14 +47,14 @@ export const useGameState = () => {
     setGame((game) => ({
       ...game,
       myCard: game.myCard.filter((c) => c !== played),
-      playedCards: [...game.playedCards, played],
+      playedCard: played,
     }))
   }
 
-  const addPlayedCard = (card: Card) => {
+  const setPlayedCard = (card: Card) => {
     setGame((game) => ({
       ...game,
-      playedCards: [...game.playedCards, card],
+      playedCard: card,
     }))
   }
 
@@ -65,6 +65,17 @@ export const useGameState = () => {
     setGame((game) => ({ ...game, turn: next }))
   }
 
+  const isCardPlayable = (card: Card) => {
+    if (
+      card.color === 'black' ||
+      card.color === game.playedCard?.color ||
+      card.content === game.playedCard?.content
+    ) {
+      return true
+    }
+    return false
+  }
+
   return {
     ...game,
     set: setGame,
@@ -73,7 +84,8 @@ export const useGameState = () => {
     isPlaying,
     addMyCard,
     playMyCard,
-    addPlayedCard,
+    setPlayedCard,
     nextTurn,
+    isCardPlayable,
   }
 }

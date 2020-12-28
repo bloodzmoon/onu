@@ -55,10 +55,12 @@ const init = (server: Http.Server) => {
             if (!card) {
               const cards = player.draw(game.deck, 1)
               socket.send(Message.draw(cards))
-              game.nextTurn()
             } else {
+              player.play(card)
+              game.playedCards.push(card)
               broadcast(socket, game, Message.card(card))
             }
+            game.nextTurn()
             broadcast(socket, game, Message.update(game))
           }
           break

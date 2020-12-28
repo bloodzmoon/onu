@@ -35,6 +35,11 @@ class Player {
     }
     return drawnCards
   }
+
+  play(card: Card) {
+    const index = this.cards.indexOf(card)
+    this.cards.splice(index, 1)
+  }
 }
 
 export default Player

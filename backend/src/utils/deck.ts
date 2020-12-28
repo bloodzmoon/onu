@@ -1,8 +1,10 @@
+import { Card } from '../models/card'
+
 /**
  * Generate the deck and shuffle
  * ALL card of total 108
  */
-const generateDeck = () => {
+const generateDeck = (): Card[] => {
   const deck: any[] = []
   const colors = ['red', 'green', 'yellow', 'blue']
 
