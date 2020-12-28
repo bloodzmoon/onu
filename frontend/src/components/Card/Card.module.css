@@ -10,6 +10,7 @@
   justify-content: space-between;
   align-items: center;
   margin-right: -4rem;
+  margin-bottom: -2rem;
   transition: 0.2s;
   color: white;
   background: #383433;
@@ -17,7 +18,7 @@
 }
 
 .hoverable:hover {
-  margin-top: -2rem;
+  transform: translateY(-1rem);
   cursor: pointer;
 }
 
