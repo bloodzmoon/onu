@@ -28,7 +28,7 @@ interface ActionCard {
 interface WildCard {
   type: 'W'
   content: 'Color' | '+4'
-  color: 'black'
+  color: 'black' | 'red' | 'green' | 'yellow' | 'blue'
 }
 
 interface HideCard {

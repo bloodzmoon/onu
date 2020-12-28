@@ -14,4 +14,5 @@ export interface GameState {
   }[]
   myId: number
   myCard: Card[]
+  isPickingColor: boolean
 }

@@ -14,10 +14,15 @@ export const useGameState = () => {
     playedCard: null,
     myCard: [],
     players: [],
+    isPickingColor: false,
   })
 
   const setStatus = (status: GameStatus) => {
     setGame((game) => ({ ...game, status }))
+  }
+
+  const setIsPickingColor = (isPickingColor: boolean) => {
+    setGame((game) => ({ ...game, isPickingColor }))
   }
 
   /**
@@ -89,6 +94,7 @@ export const useGameState = () => {
     ...game,
     set: setGame,
     setStatus,
+    setIsPickingColor,
     sortedPlayer,
     isPlaying,
     addMyCard,

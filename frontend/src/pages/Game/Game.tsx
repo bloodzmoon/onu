@@ -1,7 +1,7 @@
 import { Redirect } from 'react-router-dom'
 import { useGameState, useGlobalState, useWebSocket } from '../../hooks'
 import { Message } from '../../utils'
-import { Deck, Player } from '../../components'
+import { ColorPicker, Deck, Player } from '../../components'
 import { InMessage } from '../../models/message'
 import { Card } from '../../models/card'
 import styles from './Game.module.css'
@@ -29,9 +29,22 @@ export const Game = () => {
     game.nextTurn()
   }
 
+  function handlePlay(card: Card) {
+    game.playMyCard(card)
+    if (card.type === 'W') game.setIsPickingColor(true)
+    else playCard(card)
+  }
+
+  function pickColor(color: 'red' | 'green' | 'blue' | 'yellow') {
+    const card = game.playedCard
+    card!.color = color
+    game.setPlayedCard(card!)
+    game.setIsPickingColor(false)
+    playCard(card!)
+  }
+
   function playCard(card: Card) {
     socket.send(Message.play(global.gameId, game.myId, card))
-    game.playMyCard(card)
     switch (card.content) {
       case 'Rev':
         game.changeDirection()
@@ -116,6 +129,7 @@ export const Game = () => {
         {game.status !== 'playing' && (
           <div className={styles.wait}>Waiting for player</div>
         )}
+        {game.isPickingColor && <ColorPicker onSelect={pickColor} />}
         <div className={styles.gameid}>Game ID {global.gameId}</div>
         <Deck
           lastestCard={game.playedCard!}
@@ -130,7 +144,7 @@ export const Game = () => {
             position={i}
             myCards={p.id === game.myId ? game.myCard : null}
             disabled={!game.isPlaying(p.id)}
-            playCard={playCard}
+            playCard={handlePlay}
             isCardPlayable={game.isCardPlayable}
           />
         ))}

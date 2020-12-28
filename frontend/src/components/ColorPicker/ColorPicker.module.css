@@ -1,0 +1,42 @@
+.container {
+  grid-area: 1 / 1 / 4 / 4;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+  background: rgba(255, 255, 255, 0.8);
+}
+
+.color {
+  width: 200px;
+  height: 200px;
+  position: absolute;
+  border-radius: 50%;
+  transition: 0.2s;
+}
+
+.color:hover {
+  width: 220px;
+  height: 220px;
+  cursor: pointer;
+}
+
+.red {
+  background: #fa3239;
+  transform: translate(-60%, -60%);
+}
+
+.green {
+  background: #11ca5e;
+  transform: translate(60%, -60%);
+}
+
+.blue {
+  background: #2fa5ee;
+  transform: translate(-60%, 60%);
+}
+
+.yellow {
+  background: #ffc72e;
+  transform: translate(60%, 60%);
+}

@@ -1,5 +1,7 @@
 import WebSocket from 'ws'
+import Deck from '../utils/deck'
 import { Card } from '../models/card'
+import Game from './game'
 
 class Player {
   readonly id: number
@@ -24,11 +26,21 @@ class Player {
     console.log(` ${this.name}[${this.id}] : ${this.cards.length} card`)
   }
 
-  draw(deck: Card[], count: number) {
+  draw(game: Game, count: number) {
     const drawnCards = []
     for (let i = 0; i < count; i++) {
-      if (deck.length > 0) {
-        const card = deck.pop()
+      if (game.deck.length > 0) {
+        const card = game.deck.pop()
+        this.cards.push(card!)
+        drawnCards.push(card!)
+      } else {
+        const lastestCard = game.playedCards.pop()
+        game.deck.push(...game.playedCards)
+        game.playedCards.splice(0, game.playedCards.length)
+        game.playedCards.push(lastestCard!)
+        Deck.shuffle(game.deck)
+
+        const card = game.deck.pop()
         this.cards.push(card!)
         drawnCards.push(card!)
       }

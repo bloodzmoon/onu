@@ -30,9 +30,7 @@ const init = (server: Http.Server) => {
             const playerId = game.getEmptyId()
             const player = new Player(playerId, playerName, socket)
             const oldCards = game.players[playerId].cards
-            const drawnCards = oldCards.length
-              ? oldCards
-              : player.draw(game.deck, 5)
+            const drawnCards = oldCards.length ? oldCards : player.draw(game, 5)
             player.cards = drawnCards
             game.addPlayer(player)
 
@@ -48,7 +46,7 @@ const init = (server: Http.Server) => {
             const game = db.getGame(gameId)
             const player = game.players[playerId]
             if (!card) {
-              const cards = player.draw(game.deck, 1)
+              const cards = player.draw(game, 1)
               socket.send(Message.draw(cards))
             } else {
               player.play(card)
@@ -63,7 +61,15 @@ const init = (server: Http.Server) => {
                 case '+2':
                   {
                     const nextPlayer = game.getNextPlayer()
-                    const cards = nextPlayer.draw(game.deck, 2)
+                    const cards = nextPlayer.draw(game, 2)
+                    nextPlayer.socket?.send(Message.draw(cards))
+                    game.nextTurn()
+                  }
+                  break
+                case '+4':
+                  {
+                    const nextPlayer = game.getNextPlayer()
+                    const cards = nextPlayer.draw(game, 4)
                     nextPlayer.socket?.send(Message.draw(cards))
                     game.nextTurn()
                   }
