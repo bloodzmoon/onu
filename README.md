@@ -3,12 +3,11 @@
 This is Uno card game clone
 
 ### Todo
-- [x] Create room (Manual)
-- [x] Join room (Manual)
-- [x] Create room from UI
-- [x] Join room from UI
+- [x] Create room
+- [x] Join room
 - [x] Card design
-- [ ] Basic gameplay
+- [x] Basic gameplay
+- [ ] Gameover Screen
 - [ ] Special mode
 
 ### Technology behind this
