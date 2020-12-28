@@ -58,10 +58,10 @@ export const useGameState = () => {
     }))
   }
 
-  const nextTurn = () => {
-    const unit = game.direction === 'cw' ? +1 : -1
+  const nextTurn = (n: number = 1) => {
+    const unit = game.direction === 'cw' ? +n : -n
     let next = (game.turn + unit) % 4
-    if (next === -1) next = 3
+    if (next < 0) next = 4 - next
     setGame((game) => ({ ...game, turn: next }))
   }
 

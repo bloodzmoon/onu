@@ -57,12 +57,11 @@ const shuffle = (array: any[]) => {
 /**
  * Get the first Number card from deck
  */
-const getFirstCard = (cards: Card[]) => {
-  while (true) {
-    const card = cards.pop()
-    if (card?.type === 'N') return card
-    cards.push(card!)
-  }
+const getFirstCard = (deck: Card[]) => {
+  const card = deck.find((c) => c.type === 'N')
+  const index = deck.indexOf(card!)
+  deck.splice(index, 1)
+  return card
 }
 
 export default {

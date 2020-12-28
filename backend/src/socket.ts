@@ -58,6 +58,11 @@ const init = (server: Http.Server) => {
             } else {
               player.play(card)
               game.playedCards.push(card)
+              switch (card.content) {
+                case 'Skip':
+                  game.nextTurn()
+                  break
+              }
               broadcast(socket, game, Message.card(card))
             }
             game.nextTurn()

@@ -32,7 +32,8 @@ export const Game = () => {
   function playCard(card: Card) {
     socket.send(Message.play(global.gameId, game.myId, card))
     game.playMyCard(card)
-    game.nextTurn()
+    if (card.content === 'Skip') game.nextTurn(2)
+    else game.nextTurn()
   }
 
   function handleMessage(this: WebSocket, message: MessageEvent<any>) {
