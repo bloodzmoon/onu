@@ -69,4 +69,16 @@ interface CardMessage {
   }
 }
 
-export type InMessage = InitMessage | UpdateMessage | DrawMessage | CardMessage
+interface GameoverMessage {
+  type: 'gameover'
+  payload: {
+    result: string[]
+  }
+}
+
+export type InMessage =
+  | InitMessage
+  | UpdateMessage
+  | DrawMessage
+  | CardMessage
+  | GameoverMessage

@@ -79,21 +79,23 @@ const init = (server: Http.Server) => {
             }
             game.nextTurn()
             broadcast(game, Message.update(game))
-          }
-          break
 
-        default:
+            if (game.isGameOver())
+              broadcast(game, Message.gameover(game.getResult()))
+          }
           break
       }
     })
 
     socket.on('close', () => {
-      const game: Game | null = db.disconnect(socket)
-      if (game) {
-        game!.state = game!.isGameFull() ? 'playing' : 'stopping'
-        broadcast(game, Message.update(game))
-        if (game!.isGameEmpty()) db.removeGame(game)
-      }
+      const game: Game = db.disconnect(socket)!
+      if (!game) return
+      if (game.isGameOver()) return
+
+      game.state = game.isGameFull() ? 'playing' : 'stopping'
+      broadcast(game, Message.update(game))
+
+      if (game.isGameEmpty()) db.removeGame(game.id)
     })
   })
 }

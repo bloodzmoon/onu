@@ -1,6 +1,6 @@
 import { Card } from './card'
 
-export type GameStatus = 'loading' | 'waiting' | 'playing'
+export type GameStatus = 'loading' | 'waiting' | 'playing' | 'gameover'
 
 export interface GameState {
   status: GameStatus
@@ -15,4 +15,5 @@ export interface GameState {
   myId: number
   myCard: Card[]
   isPickingColor: boolean
+  result: string[]
 }

@@ -35,7 +35,11 @@ class Player {
         drawnCards.push(card!)
       } else {
         const lastestCard = game.playedCards.pop()
-        game.deck.push(...game.playedCards)
+        const replayCard: Card[] = game.playedCards.map((c) => {
+          if (c.type === 'W') return { ...c, color: 'black' }
+          return c
+        })
+        game.deck.push(...replayCard)
         game.playedCards.splice(0, game.playedCards.length)
         game.playedCards.push(lastestCard!)
         Deck.shuffle(game.deck)

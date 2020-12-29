@@ -15,6 +15,7 @@ export const useGameState = () => {
     myCard: [],
     players: [],
     isPickingColor: false,
+    result: [],
   })
 
   const setStatus = (status: GameStatus) => {
@@ -90,6 +91,14 @@ export const useGameState = () => {
     }))
   }
 
+  const over = (result: string[]) => {
+    setGame((game) => ({
+      ...game,
+      status: 'gameover',
+      result,
+    }))
+  }
+
   return {
     ...game,
     set: setGame,
@@ -103,5 +112,6 @@ export const useGameState = () => {
     nextTurn,
     isCardPlayable,
     changeDirection,
+    over,
   }
 }

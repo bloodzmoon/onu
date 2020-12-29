@@ -93,6 +93,19 @@ class Game {
   getLastestCard() {
     return this.playedCards[this.playedCards.length - 1]
   }
+
+  isGameOver() {
+    const winner = this.players.find((p) => p.cards.length === 0)
+    if (!winner) return false
+    return true
+  }
+
+  getResult() {
+    const result = [...this.players].sort(
+      (a, b) => a.cards.length - b.cards.length
+    )
+    return result.map((r) => r.name)
+  }
 }
 
 export default Game

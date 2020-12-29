@@ -59,9 +59,20 @@ const card = (card: Card) => {
   return JSON.stringify(message)
 }
 
+const gameover = (result: string[]) => {
+  const message: OutMessage = {
+    type: 'gameover',
+    payload: {
+      result,
+    },
+  }
+  return JSON.stringify(message)
+}
+
 export default {
   init,
   update,
   draw,
   card,
+  gameover,
 }

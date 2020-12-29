@@ -1,7 +1,7 @@
 import { Redirect } from 'react-router-dom'
 import { useGameState, useGlobalState, useWebSocket } from '../../hooks'
 import { Message } from '../../utils'
-import { ColorPicker, Deck, Player } from '../../components'
+import { ColorPicker, Deck, Gameover, Player } from '../../components'
 import { InMessage } from '../../models/message'
 import { Card } from '../../models/card'
 import styles from './Game.module.css'
@@ -17,6 +17,7 @@ export const Game = () => {
   const global = useGlobalState()
   const game = useGameState()
   const socket = useWebSocket(URL, joinRoom, handleMessage)
+  console.log('rerender')
 
   function joinRoom() {
     if (!socket) return
@@ -114,7 +115,9 @@ export const Game = () => {
         }
         break
 
-      default:
+      case 'gameover':
+        const { result } = msg.payload
+        game.over(result)
         break
     }
   }
@@ -126,9 +129,10 @@ export const Game = () => {
   return (
     <>
       <div className={styles.container}>
-        {game.status !== 'playing' && (
+        {game.status === 'waiting' && (
           <div className={styles.wait}>Waiting for player</div>
         )}
+        {game.status === 'gameover' && <Gameover result={game.result} />}
         {game.isPickingColor && <ColorPicker onSelect={pickColor} />}
         <div className={styles.gameid}>Game ID {global.gameId}</div>
         <Deck
