@@ -1,7 +1,7 @@
 import { Redirect } from 'react-router-dom'
 import { useGameState, useGlobalState, useWebSocket } from '../../hooks'
-import { Message } from '../../utils'
-import { ColorPicker, Deck, Gameover, Player } from '../../components'
+import { Message } from '../../utils/messages'
+import { ColorPicker, Deck, Gameover, Loader, Player } from '../../components'
 import { InMessage } from '../../models/message'
 import { Card } from '../../models/card'
 import styles from './Game.module.css'
@@ -125,14 +125,12 @@ export const Game = () => {
 
   // Render HTML
   if (!global.gameId) return <Redirect to="/" />
-  if (game.status === 'loading') return <div>Loading</div>
+  if (game.status === 'loading') return <Loader text="Connecting" />
 
   return (
     <>
       <div className={styles.container}>
-        {game.status === 'waiting' && (
-          <div className={styles.wait}>Waiting for player</div>
-        )}
+        {game.status === 'waiting' && <Loader text="Waiting for player" />}
         {game.status === 'gameover' && <Gameover result={game.result} />}
         {game.isPickingColor && <ColorPicker onSelect={pickColor} />}
         <div className={styles.gameid}>Game ID {global.gameId}</div>

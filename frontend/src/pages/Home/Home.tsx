@@ -13,6 +13,10 @@ export const Home = () => {
   const global = useGlobalState()
   const history = useHistory()
   const [step, setStep] = useState<boolean>(true)
+  /**
+   * true  : Enter Name
+   * false : Enter Game ID
+   */
 
   const setMyName = (e: ChangeEvent<HTMLInputElement>) =>
     global.setMyName(e.target.value)
