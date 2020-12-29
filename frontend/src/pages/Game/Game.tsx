@@ -130,7 +130,12 @@ export const Game = () => {
   return (
     <>
       <div className={styles.container}>
-        {game.status === 'waiting' && <Loader text="Waiting for player" />}
+        {game.status === 'waiting' && (
+          <Loader
+            text="Waiting for player"
+            subtext={`GameID ${global.gameId}`}
+          />
+        )}
         {game.status === 'gameover' && <Gameover result={game.result} />}
         {game.isPickingColor && <ColorPicker onSelect={pickColor} />}
         <div className={styles.gameid}>Game ID {global.gameId}</div>
