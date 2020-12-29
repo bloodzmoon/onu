@@ -92,7 +92,7 @@ const init = (server: Http.Server) => {
       if (!game) return
       if (game.isGameOver()) return
 
-      game.state = game.isGameFull() ? 'playing' : 'stopping'
+      game.state = game.isGameFull() ? 'playing' : 'waiting'
       broadcast(game, Message.update(game))
 
       if (game.isGameEmpty()) db.removeGame(game.id)

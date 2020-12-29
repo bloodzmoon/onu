@@ -15,7 +15,7 @@ class Game {
   readonly playedCards: Card[]
   public direction: 'cw' | 'ccw'
   public turn: number
-  public state: 'waiting' | 'playing' | 'stopping'
+  public state: 'waiting' | 'playing'
 
   constructor(id: string) {
     this.id = id
