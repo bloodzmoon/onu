@@ -10,7 +10,7 @@ const generateDeck = (): Card[] => {
 
   // Generate Number Card
   colors.forEach((c) => {
-    for (let i = 0; i < 1; i++) {
+    for (let i = 0; i < 10; i++) {
       const card = { type: 'N', content: `${i}`, color: c }
       deck.push(card)
       if (i !== 0) deck.push(card)
