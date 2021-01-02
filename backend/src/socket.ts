@@ -80,8 +80,10 @@ const init = (server: Http.Server) => {
             game.nextTurn()
             broadcast(game, Message.update(game))
 
-            if (game.isGameOver())
+            if (game.isGameOver()) {
               broadcast(game, Message.gameover(game.getResult()))
+              db.removeGame(game.id)
+            }
           }
           break
       }
