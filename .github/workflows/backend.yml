@@ -12,7 +12,7 @@ defaults:
     working-directory: ./backend
     
 jobs:
-  "Build & Deploy to Heroku":
+  Heroku:
     runs-on: ubuntu-latest
 
     steps:
