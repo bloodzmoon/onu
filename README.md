@@ -32,4 +32,4 @@ Frontend
 `Netlify: Automatic via Github actions`
 
 Backend
-`Heroku: git subtree push --prefix backend heroku master`
+`Heroku: Automatic via Github actions`
