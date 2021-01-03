@@ -34,13 +34,14 @@ jobs:
       - name: Push to Heroku branch
         run: |
           cd build
+          git checkout -b heroku
           git config --global user.name ${{secrets.NAME}}
           git config --global user.email ${{secrets.EMAIL}}
           git init
           git remote add origin https://bloodzmoon:${{secrets.TOKEN}}@github.com/bloodzmoon/onu.git
           git add . -f
           git commit -m '🚀 Deploy'
-          git push origin heroku --force
+          git push -u origin heroku --force
       
 #       - uses: akhileshns/heroku-deploy@v3.8.8
 #         with:
