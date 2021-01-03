@@ -1,0 +1,38 @@
+name: CI/CD
+
+on:
+  push:
+    branches: [ master ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+        
+      - name: Prepare working-directory
+        working-directory: ./frontend
+        
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v2.1.0
+        with:
+          node-version: '12.x'
+          
+      - name: Install dependencies
+        run: npm install
+        
+      - name: Build app
+        run: npm run build
+
+      - name: Install the Netlify CLI
+        run: npm install netlify-cli -g
+
+      - name: Deploy to Netlify
+        env:
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+        run: netlify deploy --dir=build --prod
