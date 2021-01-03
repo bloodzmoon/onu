@@ -8,8 +8,8 @@ import { PlayerData } from '@shared/game.model'
 import { Card } from '@shared/card.model'
 import styles from './Game.module.css'
 
-const URL = 'ws://localhost:5000'
-// const URL = 'wss://onu-uno.herokuapp.com/'
+// const URL = 'ws://localhost:5000'
+const URL = 'wss://onu-uno.herokuapp.com/'
 
 /**
  * This is the game route `/game`
