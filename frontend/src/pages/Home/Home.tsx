@@ -41,7 +41,6 @@ export const Home = () => {
 
   const handleEnterKey = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') handleClick()
-    if (e.key === 'q') console.log(global)
   }
 
   const placeholder = step ? 'Your name' : 'Game ID'

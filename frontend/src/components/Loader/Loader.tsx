@@ -10,8 +10,6 @@ interface Props {
  * Just full screen overlay with some text
  */
 export const Loader = React.memo(({ text, subtext }: Props) => {
-  console.log('loader', text)
-
   return (
     <div className={styles.loader}>
       {text}
