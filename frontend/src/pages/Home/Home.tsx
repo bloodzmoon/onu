@@ -1,7 +1,7 @@
-import { ChangeEvent, KeyboardEvent, useState } from 'react'
+import { KeyboardEvent, useEffect, useRef, useState } from 'react'
 import { useHistory } from 'react-router-dom'
-import { useGlobalState } from '../../hooks'
-import { Button, Input } from '../../components'
+import { useGlobalState } from 'Hooks'
+import { Button, Input } from 'Components'
 import styles from './Home.module.css'
 
 /**
@@ -12,46 +12,51 @@ import styles from './Home.module.css'
 export const Home = () => {
   const global = useGlobalState()
   const history = useHistory()
+  const inputRef = useRef<HTMLInputElement>(null)
   const [step, setStep] = useState<boolean>(true)
   /**
    * true  : Enter Name
    * false : Enter Game ID
    */
 
-  const setMyName = (e: ChangeEvent<HTMLInputElement>) =>
-    global.setMyName(e.target.value)
+  useEffect(() => {
+    if (global.gameId) history.push('/game')
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [global.gameId])
 
-  const setGameId = (e: ChangeEvent<HTMLInputElement>) =>
-    global.setGameId(e.target.value)
+  const setName = () => {
+    const name = inputRef.current!.value
+    global.setMyName(name)
+    if (name.length === 0) return alert('Enter ya name!')
 
-  const confirmName = () => {
-    if (global.myName.length === 0) return alert('Enter ya name!')
     setStep(false)
+    inputRef.current!.value = ''
   }
 
-  const enterGame = () => {
-    if (global.gameId.length === 0) return alert('Enter game ID!!!')
-    history.push('/game')
+  const setGameId = () => {
+    const gameId = inputRef.current!.value
+    global.setGameId(gameId)
+    if (gameId.length === 0) return alert('Enter game ID!!!')
   }
 
   const handleEnterKey = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') handleClick()
+    if (e.key === 'q') console.log(global)
   }
 
   const placeholder = step ? 'Your name' : 'Game ID'
-  const value = step ? global.myName : global.gameId
-  const handleChange = step ? setMyName : setGameId
-  const handleClick = step ? confirmName : enterGame
+  const handleClick = step ? setName : setGameId
 
   // Render HTML
   return (
     <div className={styles.container}>
       <header className={styles.header}>ONU!</header>
       <Input
+        ref={inputRef}
         placeholder={placeholder}
-        value={value}
-        onChange={handleChange}
         onKeyPress={handleEnterKey}
+        autoComplete="no"
+        autoCorrect="off"
         autoFocus
       />
       <br />

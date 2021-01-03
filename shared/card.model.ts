@@ -16,25 +16,27 @@
 interface NumberCard {
   type: 'N'
   content: '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9'
-  color: 'red' | 'green' | 'yellow' | 'blue'
+  color: Color
 }
 
 interface ActionCard {
   type: 'A'
   content: '+2' | 'Rev' | 'Skip'
-  color: 'red' | 'green' | 'yellow' | 'blue'
+  color: Color
 }
 
 interface WildCard {
   type: 'W'
   content: 'Color' | '+4'
-  color: 'black' | 'red' | 'green' | 'yellow' | 'blue'
+  color: Color
 }
 
 interface HideCard {
   type: 'H'
   content: 'ONU'
-  color: 'black'
+  color: Color
 }
+
+type Color = 'black' | 'red' | 'green' | 'yellow' | 'blue'
 
 export type Card = NumberCard | ActionCard | WildCard | HideCard

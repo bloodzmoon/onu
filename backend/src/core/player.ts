@@ -1,7 +1,8 @@
 import WebSocket from 'ws'
 import Deck from '../utils/deck'
-import { Card } from '../models/card'
+import Message from '../utils/message'
 import Game from './game'
+import { Card } from '@shared/card.model'
 
 class Player {
   readonly id: number
@@ -16,39 +17,27 @@ class Player {
     this.cards = []
   }
 
-  static getNull(cards?: Card[]) {
-    const nullPlayer = new Player(-1, 'Waiting', null)
-    nullPlayer.cards = cards || []
-    return nullPlayer
-  }
-
-  show() {
-    console.log(` ${this.name}[${this.id}] : ${this.cards.length} card`)
+  /**
+   * If cards is passed to this function player will
+   * use that cards as his own cards otherwise draw cards
+   */
+  static getDefault(game: Game, cards?: Card[]) {
+    const player = new Player(-1, 'Waiting', null)
+    player.cards = cards || player.draw(game, 5)
+    return player
   }
 
   draw(game: Game, count: number) {
     const drawnCards = []
     for (let i = 0; i < count; i++) {
-      if (game.deck.length > 0) {
-        const card = game.deck.pop()
-        this.cards.push(card!)
-        drawnCards.push(card!)
-      } else {
-        const lastestCard = game.playedCards.pop()
-        const replayCard: Card[] = game.playedCards.map((c) => {
-          if (c.type === 'W') return { ...c, color: 'black' }
-          return c
-        })
-        game.deck.push(...replayCard)
-        game.playedCards.splice(0, game.playedCards.length)
-        game.playedCards.push(lastestCard!)
-        Deck.shuffle(game.deck)
+      if (game.deck.length <= 0)
+        Deck.reShufflePlayedCards(game.deck, game.playedCards)
 
-        const card = game.deck.pop()
-        this.cards.push(card!)
-        drawnCards.push(card!)
-      }
+      const card = game.deck.pop()
+      this.cards.push(card!)
+      drawnCards.push(card!)
     }
+    this.socket?.send(Message.draw(drawnCards))
     return drawnCards
   }
 
@@ -56,6 +45,8 @@ class Player {
     const index = this.cards.indexOf(card)
     this.cards.splice(index, 1)
   }
+
+  prepareCard() {}
 }
 
 export default Player

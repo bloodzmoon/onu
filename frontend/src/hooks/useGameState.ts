@@ -1,13 +1,13 @@
-import { useState } from 'react'
-import { GameState, GameStatus } from '../models/game'
-import { Card } from '../models/card'
+import { useCallback, useState } from 'react'
+import { Card } from '@shared/card.model'
+import { ClientGameStatus, GameState } from '@shared/game.model'
 
 /**
  * Shorthand ...because im lazy
  */
 export const useGameState = () => {
   const [game, setGame] = useState<GameState>({
-    status: 'loading',
+    status: 'waiting',
     myId: 0,
     turn: 0,
     direction: 'cw',
@@ -18,7 +18,7 @@ export const useGameState = () => {
     result: [],
   })
 
-  const setStatus = (status: GameStatus) => {
+  const setStatus = (status: ClientGameStatus) => {
     setGame((game) => ({ ...game, status }))
   }
 
@@ -31,6 +31,7 @@ export const useGameState = () => {
    * of the player array
    */
   const sortedPlayer = () => {
+    if (!game.players.length) return []
     const sorted = [...game.players]
     while (sorted[0].id !== game.myId) {
       const player = sorted.shift()
@@ -72,16 +73,19 @@ export const useGameState = () => {
     return next
   }
 
-  const isCardPlayable = (card: Card) => {
-    if (
-      card.color === 'black' ||
-      card.color === game.playedCard?.color ||
-      card.content === game.playedCard?.content
-    ) {
-      return true
-    }
-    return false
-  }
+  const isCardPlayable = useCallback(
+    (card: Card) => {
+      if (
+        card.color === 'black' ||
+        card.color === game.playedCard?.color ||
+        card.content === game.playedCard?.content
+      ) {
+        return true
+      }
+      return false
+    },
+    [game.playedCard]
+  )
 
   const changeDirection = () => {
     const newDir = game.direction === 'cw' ? 'ccw' : 'cw'

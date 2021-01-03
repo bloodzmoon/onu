@@ -1,8 +1,8 @@
-import { Card } from '../models/card'
-import { OutMessage } from '../models/message'
+import { Card } from '@shared/card.model'
+import { ClientMessage } from '@shared/message.model'
 
 const join = (playerName: string, gameId: string) => {
-  const msg: OutMessage = {
+  const msg: ClientMessage = {
     type: 'join',
     payload: { playerName, gameId },
   }
@@ -10,7 +10,7 @@ const join = (playerName: string, gameId: string) => {
 }
 
 const play = (gameId: string, playerId: number, card: Card | null) => {
-  const msg: OutMessage = {
+  const msg: ClientMessage = {
     type: 'play',
     payload: { gameId, playerId, card },
   }

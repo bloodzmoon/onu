@@ -1,7 +1,9 @@
 import WebSocket from 'ws'
 import Player from './player'
 import Deck from '../utils/deck'
-import { Card } from '../models/card'
+import Message from '../utils/message'
+import { Card } from '@shared/card.model'
+import { Direction, ServerGameStatus } from '@shared/game.model'
 
 /**
  * Game will contains all information about
@@ -13,32 +15,24 @@ class Game {
   readonly players: Player[]
   readonly deck: Card[]
   readonly playedCards: Card[]
-  public direction: 'cw' | 'ccw'
+  public direction: Direction
   public turn: number
-  public state: 'waiting' | 'playing'
+  public status: ServerGameStatus
 
   constructor(id: string) {
     this.id = id
-    this.players = Array(4).fill(Player.getNull())
     this.deck = Deck.generateDeck()
+    this.players = Array(4)
+      .fill('')
+      .map(() => Player.getDefault(this))
     this.playedCards = [Deck.getFirstCard(this.deck)!]
     this.direction = 'cw'
     this.turn = 0
-    this.state = 'waiting'
-  }
-
-  show() {
-    console.log('#', this.id)
-    this.players.forEach((p) => p.show())
+    this.status = 'waiting'
   }
 
   getEmptyId() {
-    for (let i = 0; i < 4; i++) {
-      if (this.players[i].id === -1) {
-        return i
-      }
-    }
-    return -1
+    return this.players.findIndex((p) => p.id === -1)
   }
 
   isGameFull() {
@@ -47,6 +41,10 @@ class Game {
 
   isGameEmpty() {
     return this.players.every((p) => p.id === -1)
+  }
+
+  updateStatus() {
+    this.status = this.isGameFull() ? 'playing' : 'waiting'
   }
 
   getPlayerBySocket(socket: WebSocket) {
@@ -64,18 +62,49 @@ class Game {
 
   addPlayer(player: Player) {
     const isExist = this.getPlayerBySocket(player.socket!)
-    if (!isExist) this.players[player.id] = player
+    if (isExist) return
+    const oldCards = this.players[player.id].cards
+    player.cards = oldCards
+
+    this.players[player.id] = player
+    player.socket?.send(Message.init(this, player.id, player.cards))
   }
 
+  // Replace player with new instance of player but cards still alive
   removePlayer(player: Player) {
     const index = this.players.indexOf(player)
-    if (index !== -1) this.players[index] = Player.getNull(player.cards)
+    if (index === -1) return
+    this.players[index] = Player.getDefault(this, player.cards)
   }
 
-  nextTurn() {
-    const unit = this.direction === 'cw' ? +1 : -1
-    this.turn = (this.turn + unit) % 4
-    if (this.turn < 0) this.turn = 4 + this.turn
+  playCard(player: Player, card: Card) {
+    player.play(card)
+    this.playedCards.push(card)
+    switch (card.content) {
+      case 'Rev':
+        this.changeDirection()
+        this.nextTurn()
+        break
+      case 'Skip':
+        this.nextTurn(2)
+        break
+      case '+2':
+        {
+          const nextPlayer = this.getNextPlayer()
+          nextPlayer.draw(this, 2)
+          this.nextTurn(2)
+        }
+        break
+      case '+4':
+        {
+          const nextPlayer = this.getNextPlayer()
+          nextPlayer.draw(this, 4)
+          this.nextTurn(2)
+        }
+        break
+      default:
+        this.nextTurn()
+    }
   }
 
   changeDirection() {
@@ -83,10 +112,19 @@ class Game {
     this.direction = newDir
   }
 
+  getNextTurn(n: number = 1) {
+    const unit = this.direction === 'cw' ? +n : -n
+    let nextTurn = (this.turn + unit) % 4
+    if (nextTurn < 0) nextTurn = 4 + nextTurn
+    return nextTurn
+  }
+
+  nextTurn(n: number = 1) {
+    this.turn = this.getNextTurn(n)
+  }
+
   getNextPlayer() {
-    const unit = this.direction === 'cw' ? +1 : -1
-    let next = (this.turn + unit) % 4
-    if (next < 0) next = 4 + next
+    const next = this.getNextTurn()
     return this.players[next]
   }
 
@@ -95,15 +133,12 @@ class Game {
   }
 
   isGameOver() {
-    const winner = this.players.find((p) => p.cards.length === 0)
-    if (!winner) return false
-    return true
+    return this.players.some((p) => p.cards.length === 0)
   }
 
   getResult() {
-    const result = [...this.players].sort(
-      (a, b) => a.cards.length - b.cards.length
-    )
+    const players = [...this.players]
+    const result = players.sort((a, b) => a.cards.length - b.cards.length)
     return result.map((r) => r.name)
   }
 }

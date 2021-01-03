@@ -1,4 +1,8 @@
 import { useEffect, useRef, useCallback } from 'react'
+import { useGlobalState } from './useGlobalState'
+import { useGameState } from './useGameState'
+import { Message } from 'Utils/messages'
+import { ServerMessage } from '@shared/message.model'
 
 /**
  * This custom hooks will make your life easier
@@ -7,14 +11,14 @@ import { useEffect, useRef, useCallback } from 'react'
  */
 export const useWebSocket = (
   url: string,
-  handleOpen: () => void,
-  handleMessage: (this: WebSocket, message: MessageEvent<any>) => void
+  game: ReturnType<typeof useGameState>
 ) => {
   const socket = useRef<WebSocket | null>(null)
+  const global = useGlobalState()
 
   useEffect(() => {
     socket.current = new WebSocket(url)
-    socket.current.onopen = handleOpen
+    socket.current.onopen = joinGame
     socket.current.onmessage = handleMessage
 
     return () => socket.current?.close()
@@ -26,6 +30,77 @@ export const useWebSocket = (
       socket.current?.send(message)
     },
     [socket]
+  )
+
+  const joinGame = useCallback(() => {
+    if (!socket) return
+    const { myName, gameId } = global
+    socket.current?.send(Message.join(myName, gameId))
+    console.log('join')
+  }, [socket, global])
+
+  const handleMessage = useCallback(
+    function (this: WebSocket, message: MessageEvent<any>) {
+      const msg: ServerMessage = JSON.parse(message.data)
+      console.log('ws - ', msg.type)
+      switch (msg.type) {
+        case 'init':
+          {
+            const {
+              turn,
+              direction,
+              playerId,
+              players,
+              cards,
+              playedCard,
+            } = msg.payload
+            game.set((game: any) => ({
+              ...game,
+              turn,
+              direction,
+              players,
+              myId: playerId,
+              myCard: cards,
+              status: 'waiting',
+              playedCard,
+            }))
+          }
+          break
+
+        case 'update':
+          {
+            const { turn, direction, players, status } = msg.payload
+            game.set((game) => ({
+              ...game,
+              turn,
+              direction,
+              players,
+              status,
+            }))
+          }
+          break
+
+        case 'draw':
+          {
+            const { cards } = msg.payload
+            game.addMyCard(cards)
+          }
+          break
+
+        case 'card':
+          {
+            const { card } = msg.payload
+            game.setPlayedCard(card)
+          }
+          break
+
+        case 'gameover':
+          const { result } = msg.payload
+          game.over(result)
+          break
+      }
+    },
+    [game]
   )
 
   return { send }

@@ -12,10 +12,6 @@ class Database {
     this.games = []
   }
 
-  show() {
-    this.games.forEach((g) => g.show())
-  }
-
   createGame(id: string) {
     const game = new Game(id)
     this.games.push(game)
@@ -36,7 +32,7 @@ class Database {
     return this.games.find((g) => g.id === id) !== undefined
   }
 
-  disconnect(socket: WebSocket) {
+  disconnect(socket: WebSocket): Game | null {
     let fromGame: Game | null = null
     this.games.some((g) => {
       const player = g.getPlayerBySocket(socket)
@@ -44,7 +40,6 @@ class Database {
         fromGame = g
         g.removePlayer(player)
         return true
-        // console.log(`! ${player.name} has left game ${g.id}`)
       }
     })
     return fromGame

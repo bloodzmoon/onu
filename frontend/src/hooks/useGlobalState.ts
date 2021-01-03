@@ -1,4 +1,3 @@
-import { useCallback } from 'react'
 import { useRecoilState } from 'recoil'
 import { globalState } from '../store'
 
@@ -9,23 +8,17 @@ import { globalState } from '../store'
 export const useGlobalState = () => {
   const [global, setGlobal] = useRecoilState(globalState)
 
-  const setGameId = useCallback(
-    (gameId: string) => {
-      setGlobal((global) => ({ ...global, gameId }))
-    },
-    [setGlobal]
-  )
+  const setGameId = (gameId: string) => {
+    setGlobal((global) => ({ ...global, gameId }))
+  }
 
-  const setMyName = useCallback(
-    (myName: string) => {
-      setGlobal((global) => ({ ...global, myName }))
-    },
-    [setGlobal]
-  )
+  const setMyName = (myName: string) => {
+    setGlobal((global) => ({ ...global, myName }))
+  }
 
-  const reset = useCallback(() => {
+  const reset = () => {
     setGlobal({ gameId: '', myName: '' })
-  }, [setGlobal])
+  }
 
   return { ...global, setGameId, setMyName, reset }
 }

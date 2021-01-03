@@ -1,4 +1,4 @@
-import { Card } from '../models/card'
+import { Card } from '@shared/card.model'
 
 /**
  * Generate the deck and shuffle
@@ -64,8 +64,26 @@ const getFirstCard = (deck: Card[]) => {
   return card
 }
 
+/**
+ * Reshuffle played cards into the deck so that
+ * the deck never run out of card!
+ */
+const reShufflePlayedCards = (deck: Card[], playedCards: Card[]) => {
+  const lastestCard = playedCards.pop()
+  const replayCard: Card[] = playedCards.map((c) => {
+    if (c.type === 'W') return { ...c, color: 'black' }
+    return c
+  })
+
+  deck.push(...replayCard)
+  playedCards.splice(0, playedCards.length)
+  playedCards.push(lastestCard!)
+  shuffle(deck)
+}
+
 export default {
   generateDeck,
   shuffle,
   getFirstCard,
+  reShufflePlayedCards,
 }

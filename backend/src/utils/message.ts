@@ -1,13 +1,13 @@
 import Game from '../core/game'
-import { Card } from '../models/card'
-import { OutMessage } from '../models/message'
+import { Card } from '@shared/card.model'
+import { ServerMessage } from '@shared/message.model'
 
 /**
- * This message will be sent to whom
+ * This message will be sent to player
  * that join game for the first time
  */
 const init = (game: Game, playerId: number, cards: Card[]) => {
-  const message: OutMessage = {
+  const message: ServerMessage = {
     type: 'init',
     payload: {
       turn: game.turn,
@@ -23,14 +23,14 @@ const init = (game: Game, playerId: number, cards: Card[]) => {
 
 /**
  * This message will be sent when there is
- * any common action
- * ex. join / leave / nextTurn / changeDir
+ * any game update
+ * eg. join / leave / nextTurn / changeDir / draw / play
  */
 const update = (game: Game) => {
-  const message: OutMessage = {
+  const message: ServerMessage = {
     type: 'update',
     payload: {
-      state: game.state,
+      status: game.status,
       turn: game.turn,
       direction: game.direction,
       players: game.getPlayersData(),
@@ -39,8 +39,11 @@ const update = (game: Game) => {
   return JSON.stringify(message)
 }
 
+/**
+ * Player that draw cards will get this message
+ */
 const draw = (cards: Card[]) => {
-  const message: OutMessage = {
+  const message: ServerMessage = {
     type: 'draw',
     payload: {
       cards,
@@ -49,8 +52,12 @@ const draw = (cards: Card[]) => {
   return JSON.stringify(message)
 }
 
+/**
+ * This message will be broadcast when someone
+ * play a card
+ */
 const card = (card: Card) => {
-  const message: OutMessage = {
+  const message: ServerMessage = {
     type: 'card',
     payload: {
       card,
@@ -59,11 +66,15 @@ const card = (card: Card) => {
   return JSON.stringify(message)
 }
 
-const gameover = (result: string[]) => {
-  const message: OutMessage = {
+/**
+ * This message will be sent when the
+ * game has ended
+ */
+const gameover = (game: Game) => {
+  const message: ServerMessage = {
     type: 'gameover',
     payload: {
-      result,
+      result: game.getResult(),
     },
   }
   return JSON.stringify(message)
