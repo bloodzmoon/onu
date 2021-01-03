@@ -41,7 +41,7 @@ jobs:
           git remote add origin https://bloodzmoon:${{secrets.TOKEN}}@github.com/bloodzmoon/onu.git
           git add . -f
           git commit -m '🚀 Deploy'
-          git push -u origin heroku --force
+          git push heroku master
       
 #       - uses: akhileshns/heroku-deploy@v3.8.8
 #         with:
