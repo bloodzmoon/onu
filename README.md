@@ -9,8 +9,9 @@ This is Uno card game clone
 - [x] Card design
 - [x] Basic gameplay
 - [x] Gameover Screen
-- [ ] Optimization
+- [x] Optimization
 - [ ] Special mode
+- [ ] Unit testing
 
 ### Technology behind this
 

@@ -1,5 +1,5 @@
 import { Card } from './card.model'
-import { Direction, GameStatus, PlayerData } from './game.model'
+import { Direction, ServerGameStatus, PlayerData } from './game.model'
 
 /**
  * [ Server message ]
@@ -30,7 +30,7 @@ type InitMessage = {
 type UpdateMessage = {
   type: 'update'
   payload: {
-    status: GameStatus
+    status: ServerGameStatus
     turn: number
     direction: Direction
     players: {
