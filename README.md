@@ -1,6 +1,9 @@
 # Onu!
 
-This is Uno card game clone
+This is Uno card game clone.  
+[Play here](https://onu-uno.netlify.app/)
+
+![ONU Gameplay](img.png)
 
 ### Todo
 
@@ -29,7 +32,13 @@ Backend
 ### Deployment
 
 Frontend
-`Netlify: Automatic via Github actions`
+
+```
+Netlify: Automatic via Github actions
+```
 
 Backend
-`Heroku: Automatic via Github actions`
+
+```
+Heroku: Automatic via Github actions
+```

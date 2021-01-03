@@ -36,13 +36,11 @@ export const useWebSocket = (
     if (!socket) return
     const { myName, gameId } = global
     socket.current?.send(Message.join(myName, gameId))
-    console.log('join')
   }, [socket, global])
 
   const handleMessage = useCallback(
     function (this: WebSocket, message: MessageEvent<any>) {
       const msg: ServerMessage = JSON.parse(message.data)
-      console.log('ws - ', msg.type)
       switch (msg.type) {
         case 'init':
           {
