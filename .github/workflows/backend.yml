@@ -1,0 +1,40 @@
+name: Backend CI/CD
+
+on:
+  push:
+    branches: [ master ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+defaults:
+  run:
+    working-directory: ./backend
+    
+jobs:
+  Build & Deploy to Heroku:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      
+      - name: Setup Node.js environment
+        env:
+          ACTIONS_ALLOW_UNSECURE_COMMANDS: true
+        uses: actions/setup-node@v2.1.0
+        with:
+          node-version: '12.x'
+          
+      - name: Install dependencies
+        run: npm install
+        
+      - name: Build app
+        run: npm run build
+      
+      - uses: akhileshns/heroku-deploy@v3.8.8
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: "onu-uno"
+          heroku_email: "61010497@kmitl.ac.th"
+          appdir: "build"
+          
