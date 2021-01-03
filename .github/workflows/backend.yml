@@ -31,22 +31,9 @@ jobs:
       - name: Build app
         run: npm run build
         
-      - name: Push to Heroku branch
+      - name: Deploy to Heroku
         run: |
-          cd build
-          git checkout -b heroku
+          cd ../
           git config --global user.name ${{secrets.NAME}}
           git config --global user.email ${{secrets.EMAIL}}
-          git init
-          git remote add origin https://bloodzmoon:${{secrets.TOKEN}}@github.com/bloodzmoon/onu.git
-          git add . -f
-          git commit -m '🚀 Deploy'
-          git push heroku master
-      
-#       - uses: akhileshns/heroku-deploy@v3.8.8
-#         with:
-#           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
-#           heroku_app_name: "onu-uno"
-#           heroku_email: "61010497@kmitl.ac.th"
-#           appdir: "build"
-          
+          git subtree push --prefix backend heroku master

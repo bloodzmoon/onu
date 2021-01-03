@@ -1,6 +1,6 @@
 import Game from '../core/game'
-import { Card } from '@shared/card.model'
-import { ServerMessage } from '@shared/message.model'
+import { Card } from '../models/card.model'
+import { ServerMessage } from '../models/message.model'
 
 /**
  * This message will be sent to player

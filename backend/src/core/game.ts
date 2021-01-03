@@ -2,8 +2,8 @@ import WebSocket from 'ws'
 import Player from './player'
 import Deck from '../utils/deck'
 import Message from '../utils/message'
-import { Card } from '@shared/card.model'
-import { Direction, ServerGameStatus } from '@shared/game.model'
+import { Card } from '../models/card.model'
+import { Direction, ServerGameStatus } from '../models/game.model'
 
 /**
  * Game will contains all information about
