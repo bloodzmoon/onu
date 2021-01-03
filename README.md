@@ -29,7 +29,7 @@ Backend
 ### Deployment
 
 Frontend
-`Netlify: manual build then drag'n drop folder`
+`Netlify: Automatic via Github actions`
 
 Backend
 `Heroku: git subtree push --prefix backend heroku master`
