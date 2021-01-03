@@ -1,4 +1,4 @@
-import { Card } from '@shared/card.model'
+import { Card } from '../models/card.model'
 
 /**
  * Generate the deck and shuffle

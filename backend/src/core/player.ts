@@ -2,7 +2,7 @@ import WebSocket from 'ws'
 import Deck from '../utils/deck'
 import Message from '../utils/message'
 import Game from './game'
-import { Card } from '@shared/card.model'
+import { Card } from '../models/card.model'
 
 class Player {
   readonly id: number

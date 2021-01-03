@@ -4,7 +4,7 @@ import Database from './core/db'
 import Game from './core/game'
 import Player from './core/player'
 import Message from './utils/message'
-import { ClientMessage } from '@shared/message.model'
+import { ClientMessage } from './models/message.model'
 
 /**
  * Create a WebSocket Server that will handle
