@@ -1,6 +1,9 @@
 # Onu!
 
-This is Uno card game clone
+This is Uno card game clone.  
+[Play here](https://onu-uno.netlify.app/)
+
+![ONU Gameplay](https://github.com/bloodzmoon/onu/blob/master/img.png)
 
 ### Todo
 
