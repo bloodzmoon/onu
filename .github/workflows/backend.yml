@@ -37,4 +37,4 @@ jobs:
           git config --global user.name ${{secrets.NAME}}
           git config --global user.email ${{secrets.EMAIL}}
           git subtree split --prefix backend -b local
-          git push https://heroku:${{secrets.HEROKU_API_KEY}}@git.heroku.com/onu-uno.git local --force
+          git push https://heroku:${{secrets.HEROKU_API_KEY}}@git.heroku.com/onu-uno.git local:master --force
